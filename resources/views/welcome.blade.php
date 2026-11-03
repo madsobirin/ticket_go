@@ -451,7 +451,7 @@
                                 <span class="font-body-md text-body-md text-ink-600">Sudah memiliki akun member
                                     resmi?</span>
                                 <a class="font-title-sm text-title-sm text-forest-700 hover:text-forest-900 transition flex items-center gap-1"
-                                    href="#">
+                                    href="{{ route('login') }}">
                                     <span>Masuk di sini</span>
                                     <span class="material-symbols-outlined text-[16px]">north_east</span>
                                 </a>
