@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -25,10 +26,15 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake('id_ID')->name(),
             'email' => fake()->unique()->safeEmail(),
+            'username' => fake()->unique()->regexify('[a-z]{6}[0-9]{3}'),
+            'phone' => '08'.fake()->numerify('##########'),
+            'gender' => fake()->randomElement(['L', 'P']),
+            'address' => fake('id_ID')->address(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => (static::$password ??= Hash::make('password')),
+            'role' => UserRole::Member,
             'remember_token' => Str::random(10),
         ];
     }
@@ -38,8 +44,31 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(
+            fn (array $attributes) => [
+                'email_verified_at' => null,
+            ],
+        );
+    }
+
+    public function member(): static
+    {
+        return $this->state(
+            fn (array $attributes) => ['role' => UserRole::Member],
+        );
+    }
+
+    public function operator(): static
+    {
+        return $this->state(
+            fn (array $attributes) => ['role' => UserRole::Operator],
+        );
+    }
+
+    public function admin(): static
+    {
+        return $this->state(
+            fn (array $attributes) => ['role' => UserRole::Admin],
+        );
     }
 }
