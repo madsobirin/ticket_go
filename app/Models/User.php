@@ -41,6 +41,21 @@ class User extends Authenticatable
         ];
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::Admin;
+    }
+
+    public function isOperator(): bool
+    {
+        return $this->role === UserRole::Operator;
+    }
+
+    public function isMember(): bool
+    {
+        return $this->role === UserRole::Member;
+    }
+
     /**
      * @return HasMany<Booking, $this>
      */

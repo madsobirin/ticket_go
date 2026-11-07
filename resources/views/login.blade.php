@@ -299,30 +299,40 @@
                                     nomor kursi.
                                 </p>
                             </div>
-                            <div class="hidden mb-6 p-4 rounded-lg bg-error-container text-on-error-container"
-                                id="errorAlert">
-                                <div class="flex items-start gap-3">
-                                    <span class="material-symbols-outlined text-title-sm mt-0.5 text-error">error</span>
-                                    <div class="space-y-1">
-                                        <p class="font-label-lg text-label-lg font-semibold text-error">Kredensial Belum
-                                            Cocok</p>
-                                        <p class="font-body-sm text-body-sm text-on-error-container">
-                                            Nama pengguna atau kata sandi tidak sesuai dengan pangkalan data. Pastikan
-                                            ejaan tepat atau lakukan pendaftaran akun baru.
-                                        </p>
+
+                            @if (session('status'))
+                                <div class="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-green-700">check_circle</span>
+                                        <p class="font-body-sm text-body-sm">{{ session('status') }}</p>
                                     </div>
                                 </div>
-                            </div>
-                            <form class="space-y-6" id="loginForm"
-                                onsubmit="event.preventDefault(); handleLoginSubmit();">
+                            @endif
+
+                            @if ($errors->any())
+                                <div class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-800"
+                                    id="errorAlert">
+                                    <div class="flex items-start gap-3">
+                                        <span class="material-symbols-outlined text-title-sm mt-0.5 text-red-600">error</span>
+                                        <div class="space-y-1">
+                                            <p class="font-label-lg text-label-lg font-semibold text-red-800">Kredensial Belum Cocok</p>
+                                            <p class="font-body-sm text-body-sm text-red-700">
+                                                {{ $errors->first() }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <form class="space-y-6" id="loginForm" method="POST" action="{{ route('login') }}">
+                                @csrf
                                 <div class="space-y-1.5">
                                     <div class="flex items-center justify-between">
                                         <label class="font-label-lg text-label-lg text-ink-900 font-medium"
                                             for="username">
-                                            Username
+                                            Username / Email
                                         </label>
-                                        <span class="font-body-sm text-body-sm text-ink-600">Hanya karakter
-                                            alfabet/angka</span>
+                                        <span class="font-body-sm text-body-sm text-ink-600">Username atau email akun</span>
                                     </div>
                                     <div class="relative">
                                         <span
@@ -331,11 +341,11 @@
                                         </span>
                                         <input autocomplete="username"
                                             class="w-full pl-10 pr-4 py-3 rounded-lg bg-surface-container-low text-ink-900 font-body-md text-body-md placeholder:text-ink-600/60 focus:outline-none focus:bg-paper-0 transition-colors"
-                                            id="username" name="username" placeholder="cth. hendrawan" required=""
+                                            id="username" name="username" value="{{ old('username') }}" placeholder="cth. hendrawan atau nama@email.com" required=""
                                             type="text" />
                                     </div>
                                     <p class="font-body-sm text-body-sm text-ink-600">
-                                        Nama akun yang Anda tentukan saat formulir pendaftaran.
+                                        Nama akun atau email yang Anda tentukan saat formulir pendaftaran.
                                     </p>
                                 </div>
                                 <div class="space-y-1.5">
@@ -423,44 +433,6 @@
                 passwordInput.type = 'password';
                 toggleText.textContent = 'Tampilkan';
                 toggleIcon.textContent = 'visibility';
-            }
-        }
-
-        function handleLoginSubmit() {
-            const usernameVal = document.getElementById('username')?.value.trim();
-            const passwordVal = document.getElementById('password')?.value;
-            const errorAlert = document.getElementById('errorAlert');
-
-            if (!usernameVal || !passwordVal) {
-                if (errorAlert) errorAlert.classList.remove('hidden');
-                return;
-            }
-
-            if (usernameVal.toLowerCase() === 'error' || passwordVal.length < 5) {
-                if (errorAlert) {
-                    errorAlert.classList.remove('hidden');
-                    errorAlert.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest'
-                    });
-                }
-            } else {
-                if (errorAlert) errorAlert.classList.add('hidden');
-                const submitBtn = document.getElementById('submitButton');
-                if (submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = `
-                        <span class="w-4 h-4 rounded-full border-2 border-on-primary border-t-transparent animate-spin inline-block mr-2"></span>
-                        <span>Memverifikasi Akun...</span>
-                    `;
-                    setTimeout(() => {
-                        submitBtn.innerHTML = `
-                            <span class="material-symbols-outlined text-title-sm">check_circle</span>
-                            <span>Berhasil Masuk</span>
-                        `;
-                        submitBtn.classList.replace('bg-forest-700', 'bg-green-700');
-                    }, 700);
-                }
             }
         }
     </script>
