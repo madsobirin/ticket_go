@@ -4,7 +4,11 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
+use App\Http\Controllers\Operator\CityController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
+use App\Http\Controllers\Operator\RouteController;
+use App\Http\Controllers\Operator\ScheduleController;
+use App\Http\Controllers\Operator\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 // Guest Routes
@@ -29,6 +33,12 @@ Route::middleware('auth')->group(function () {
     // Operator Area (Operator & Admin)
     Route::prefix('operator')->as('operator.')->middleware('role:operator,admin')->group(function () {
         Route::get('/dashboard', [OperatorDashboardController::class, 'index'])->name('dashboard');
+
+        // Master Data
+        Route::resource('cities', CityController::class)->except(['show']);
+        Route::resource('routes', RouteController::class)->except(['show']);
+        Route::resource('vehicles', VehicleController::class)->except(['show']);
+        Route::resource('schedules', ScheduleController::class)->except(['show']);
     });
 
     // Admin Area (Admin only)
