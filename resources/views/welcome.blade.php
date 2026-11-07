@@ -310,8 +310,23 @@
                                     tiket cepat.
                                 </p>
                             </div>
-                            <form class="space-y-6" id="member-register-form"
-                                onsubmit="event.preventDefault(); handleRegistration();">
+
+                            @if ($errors->any())
+                                <div class="p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 space-y-1">
+                                    <div class="flex items-center gap-2 font-medium">
+                                        <span class="material-symbols-outlined text-red-600">error</span>
+                                        <span>Pendaftaran belum dapat diproses:</span>
+                                    </div>
+                                    <ul class="list-disc list-inside text-sm text-red-700 pl-6">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form class="space-y-6" id="member-register-form" method="POST" action="{{ route('register') }}">
+                                @csrf
                                 <!-- 1. nama (Nama Lengkap) -->
                                 <div class="space-y-1.5">
                                     <label class="block font-label-lg text-label-lg text-ink-900" for="nama">
@@ -320,12 +335,33 @@
                                     <div class="relative">
                                         <input
                                             class="w-full bg-paper-0 text-ink-900 placeholder:text-ink-600/50 font-body-md text-body-md rounded-lg px-4 py-3 bg-surface-container-low focus:bg-paper-0 focus:outline-none focus:ring-2 focus:ring-forest-700 transition"
-                                            id="nama" name="nama" placeholder="Misal: Bambang Sudirman"
+                                            id="nama" name="nama" value="{{ old('nama', old('name')) }}" placeholder="Misal: Bambang Sudirman"
                                             required="" type="text" />
                                     </div>
+                                    @error('name')
+                                        <p class="text-xs text-red-600">{{ $message }}</p>
+                                    @enderror
                                     <p class="font-body-sm text-body-sm text-ink-600">Gunakan nama yang sesuai untuk
                                         verifikasi tiket saat penjemputan.</p>
                                 </div>
+
+                                <!-- Email -->
+                                <div class="space-y-1.5">
+                                    <label class="block font-label-lg text-label-lg text-ink-900" for="email">
+                                        Alamat Email <span class="text-red-600">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input
+                                            class="w-full bg-paper-0 text-ink-900 placeholder:text-ink-600/50 font-body-md text-body-md rounded-lg px-4 py-3 bg-surface-container-low focus:bg-paper-0 focus:outline-none focus:ring-2 focus:ring-forest-700 transition"
+                                            id="email" name="email" value="{{ old('email') }}" placeholder="bambang@contoh.com"
+                                            required="" type="email" />
+                                    </div>
+                                    @error('email')
+                                        <p class="text-xs text-red-600">{{ $message }}</p>
+                                    @enderror
+                                    <p class="font-body-sm text-body-sm text-ink-600">Email untuk konfirmasi tiket dan pembaruan jadwal.</p>
+                                </div>
+
                                 <!-- 2. alamat (Alamat Tempat Tinggal) -->
                                 <div class="space-y-1.5">
                                     <label class="block font-label-lg text-label-lg text-ink-900" for="alamat">
@@ -334,7 +370,10 @@
                                     <textarea
                                         class="w-full bg-paper-0 text-ink-900 placeholder:text-ink-600/50 font-body-md text-body-md rounded-lg px-4 py-3 bg-surface-container-low focus:bg-paper-0 focus:outline-none focus:ring-2 focus:ring-forest-700 transition resize-none"
                                         id="alamat" name="alamat" placeholder="Jl. Raden Intan No. 45, Enggal, Kota Bandar Lampung" required=""
-                                        rows="2"></textarea>
+                                        rows="2">{{ old('alamat', old('address')) }}</textarea>
+                                    @error('address')
+                                        <p class="text-xs text-red-600">{{ $message }}</p>
+                                    @enderror
                                     <p class="font-body-sm text-body-sm text-ink-600">Alamat domisili atau titik acuan
                                         penjemputan shuttle travel.</p>
                                 </div>
@@ -353,8 +392,12 @@
                                             <input
                                                 class="w-full bg-paper-0 text-ink-900 placeholder:text-ink-600/50 font-body-md text-body-md rounded-lg pl-14 pr-4 py-3 bg-surface-container-low focus:bg-paper-0 focus:outline-none focus:ring-2 focus:ring-forest-700 transition"
                                                 id="telepon" name="telepon" pattern="[0-9]{8,15}"
+                                                value="{{ old('telepon', old('phone')) }}"
                                                 placeholder="81234567890" required="" type="tel" />
                                         </div>
+                                        @error('phone')
+                                            <p class="text-xs text-red-600">{{ $message }}</p>
+                                        @enderror
                                         <p class="font-body-sm text-body-sm text-ink-600">Digunakan pengemudi untuk
                                             konfirmasi tiba.</p>
                                     </div>
@@ -367,7 +410,7 @@
                                             role="radiogroup">
                                             <label
                                                 class="relative flex items-center justify-center p-3 rounded-lg cursor-pointer bg-surface-container-low hover:bg-sage-100 transition has-[:checked]:bg-forest-700 has-[:checked]:text-on-primary">
-                                                <input checked="" class="sr-only" name="jen_kelamin"
+                                                <input {{ old('jen_kelamin', old('gender', 'L')) === 'L' ? 'checked' : '' }} class="sr-only" name="jen_kelamin"
                                                     type="radio" value="L" />
                                                 <div class="flex items-center gap-2">
                                                     <span class="material-symbols-outlined text-[18px]">male</span>
@@ -376,7 +419,7 @@
                                             </label>
                                             <label
                                                 class="relative flex items-center justify-center p-3 rounded-lg cursor-pointer bg-surface-container-low hover:bg-sage-100 transition has-[:checked]:bg-forest-700 has-[:checked]:text-on-primary">
-                                                <input class="sr-only" name="jen_kelamin" type="radio"
+                                                <input {{ old('jen_kelamin', old('gender')) === 'P' ? 'checked' : '' }} class="sr-only" name="jen_kelamin" type="radio"
                                                     value="P" />
                                                 <div class="flex items-center gap-2">
                                                     <span class="material-symbols-outlined text-[18px]">female</span>
@@ -384,6 +427,9 @@
                                                 </div>
                                             </label>
                                         </div>
+                                        @error('gender')
+                                            <p class="text-xs text-red-600">{{ $message }}</p>
+                                        @enderror
                                         <p class="font-body-sm text-body-sm text-ink-600">Sesuai basis data member
                                             travel.</p>
                                     </div>
@@ -398,9 +444,12 @@
                                         <div class="relative">
                                             <input autocomplete="username"
                                                 class="w-full bg-paper-0 text-ink-900 placeholder:text-ink-600/50 font-body-md text-body-md rounded-lg px-4 py-3 bg-surface-container-low focus:bg-paper-0 focus:outline-none focus:ring-2 focus:ring-forest-700 transition"
-                                                id="username" name="username" placeholder="bambang_trv"
+                                                id="username" name="username" value="{{ old('username') }}" placeholder="bambang_trv"
                                                 required="" type="text" />
                                         </div>
+                                        @error('username')
+                                            <p class="text-xs text-red-600">{{ $message }}</p>
+                                        @enderror
                                         <p class="font-body-sm text-body-sm text-ink-600">Karakter huruf kecil dan
                                             angka tanpa spasi.</p>
                                     </div>
@@ -421,6 +470,9 @@
                                                     id="pw-toggle-icon">visibility</span>
                                             </button>
                                         </div>
+                                        @error('password')
+                                            <p class="text-xs text-red-600">{{ $message }}</p>
+                                        @enderror
                                         <p class="font-body-sm text-body-sm text-ink-600">Minimal 6 karakter untuk
                                             perlindungan akun.</p>
                                     </div>
@@ -433,16 +485,6 @@
                                         <span>Daftar Sebagai Member</span>
                                         <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                                     </button>
-                                </div>
-                                <!-- Feedback prompt area (Interactive placeholder) -->
-                                <div class="hidden p-4 rounded-lg bg-sage-100 text-forest-900 flex items-start gap-3"
-                                    id="registration-feedback">
-                                    <span class="material-symbols-outlined text-green-700">check_circle</span>
-                                    <div>
-                                        <p class="font-label-lg text-label-lg">Pendaftaran Berhasil Diproses</p>
-                                        <p class="font-body-sm text-body-sm text-ink-600">Data Anda telah dicatat.
-                                            Mengalihkan ke portal pemesanan tiket...</p>
-                                    </div>
                                 </div>
                             </form>
                             <!-- Footer Switcher Link -->
@@ -474,15 +516,6 @@
                 passwordInput.type = 'password';
                 toggleIcon.textContent = 'visibility';
             }
-        }
-
-        function handleRegistration() {
-            const feedback = document.getElementById('registration-feedback');
-            feedback.classList.remove('hidden');
-            feedback.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest'
-            });
         }
     </script>
 </body>
