@@ -20,7 +20,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('member.dashboard', [
+        return view('member.beranda', [
             'user' => $user,
             'recentBookings' => $recentBookings,
         ]);

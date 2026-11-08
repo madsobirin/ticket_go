@@ -16,6 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => EnsureRole::class,
         ]);
+
+        $middleware->redirectUsersTo(fn ($request) => match ($request->user()?->role?->value) {
+            'admin' => route('admin.dashboard'),
+            'operator' => route('operator.dashboard'),
+            default => route('member.dashboard'),
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
