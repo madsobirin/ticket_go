@@ -41,6 +41,8 @@
 <body class="bg-[#f6fbf4] text-ink-900 font-sans antialiased min-h-screen flex flex-col">
     @yield('body')
 
+    @includeWhen(view()->exists('partials.role-switcher'), 'partials.role-switcher')
+
     @stack('scripts')
 </body>
 </html>
