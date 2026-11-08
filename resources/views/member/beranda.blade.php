@@ -287,7 +287,7 @@
                     </span>
 
                     <a href="{{ route('member.profil') }}" class="font-title-sm text-title-sm text-forest-900 leading-none hover:text-forest-700 transition-colors">
-                        {{ session('auth_user.name', 'Bambang Hermanto') }}
+                        {{ auth()->user()->name ?? session('auth_user.name', 'Bambang Hermanto') }}
                     </a>
                 </div>
 
@@ -298,6 +298,14 @@
                         </span>
                     </div>
                 </a>
+
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="px-3 py-1.5 rounded-lg border border-red-600/30 text-red-600 hover:bg-red-600 hover:text-white font-semibold text-xs transition-colors flex items-center gap-1 cursor-pointer" title="Keluar Akun">
+                        <span class="material-symbols-outlined text-[16px]">logout</span>
+                        <span class="hidden sm:inline">Keluar</span>
+                    </button>
+                </form>
 
             </div>
         </div>

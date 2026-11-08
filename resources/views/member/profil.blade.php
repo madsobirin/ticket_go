@@ -225,11 +225,14 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('login') }}"
-                       class="px-4 py-2.5 rounded-xl border border-red-600/30 text-red-600 hover:bg-red-600 hover:text-white font-semibold text-xs transition-colors flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-[16px]">logout</span>
-                        Keluar Akun
-                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                               class="px-4 py-2.5 rounded-xl border border-red-600/30 text-red-600 hover:bg-red-600 hover:text-white font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">logout</span>
+                            Keluar Akun
+                        </button>
+                    </form>
                 </div>
             </div>
 
