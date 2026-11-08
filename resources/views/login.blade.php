@@ -459,11 +459,16 @@
                             <span>Berhasil Masuk</span>
                         `;
                         submitBtn.classList.replace('bg-forest-700', 'bg-green-700');
+                        setTimeout(() => {
+                            window.location.href = "{{ route('member.beranda') }}";
+                        }, 500);
                     }, 700);
                 }
             }
         }
     </script>
+
+    @include('partials.role-switcher')
 </body>
 
 </html>

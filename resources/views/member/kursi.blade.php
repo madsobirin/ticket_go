@@ -89,7 +89,7 @@
                         Cari Jadwal
                     </a>
 
-                    <a href="#" class="px-3 py-2 rounded-lg text-sm text-ink-600 hover:text-forest-900">
+                    <a href="{{ route('member.keluhan') }}" class="px-3 py-2 rounded-lg text-sm text-ink-600 hover:text-forest-900">
                         Keluhan
                     </a>
                 </nav>
@@ -98,14 +98,14 @@
             <div class="flex items-center gap-4">
                 <div class="hidden sm:flex flex-col text-right">
                     <span class="text-xs text-ink-600">Member Terdaftar</span>
-                    <span class="text-sm font-semibold text-forest-900">
+                    <a href="{{ route('member.profil') }}" class="text-sm font-semibold text-forest-900 hover:text-forest-700 transition-colors">
                         Halo, Bambang Hermanto
-                    </span>
+                    </a>
                 </div>
 
-                <div class="w-8 h-8 rounded-full bg-forest-700 flex items-center justify-center text-white">
+                <a href="{{ route('member.profil') }}" class="w-8 h-8 rounded-full bg-forest-700 flex items-center justify-center text-white ring-2 ring-forest-700/20 hover:ring-forest-700 transition-all" title="Profil Pelanggan">
                     <span class="material-symbols-outlined text-lg">person</span>
-                </div>
+                </a>
             </div>
         </div>
     </header>
@@ -717,16 +717,12 @@
             document.getElementById('selected-seat-pos').textContent = posText;
         }
 
-        // Tombol lanjut (sementara frontend)
+        // Tombol lanjut ke ringkasan pemesanan
         function continueBooking() {
-
-            alert(
-                'Kursi nomor ' + selectedSeat +
-                ' berhasil dipilih. Halaman ringkasan pemesanan akan disiapkan.'
-            );
-
+            window.location.href = "{{ route('member.pesanan') }}";
         }
     </script>
 
+    @include('partials.role-switcher')
 </body>
 </html>

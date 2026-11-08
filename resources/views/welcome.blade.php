@@ -485,6 +485,8 @@
             });
         }
     </script>
+
+    @include('partials.role-switcher')
 </body>
 
 </html>

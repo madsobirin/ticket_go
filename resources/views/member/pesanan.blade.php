@@ -197,7 +197,7 @@
                         Cari Jadwal
                     </a>
 
-                    <a href="#"
+                    <a href="{{ route('member.keluhan') }}"
                        class="px-3 py-2 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors">
                         Keluhan
                     </a>
@@ -209,16 +209,16 @@
                     <span class="font-label-sm text-label-sm text-ink-600">
                         Member Terdaftar
                     </span>
-                    <span class="font-title-sm text-title-sm text-forest-900">
+                    <a href="{{ route('member.profil') }}" class="font-title-sm text-title-sm text-forest-900 hover:text-forest-700 transition-colors">
                         Halo, Bambang Hermanto
-                    </span>
+                    </a>
                 </div>
 
-                <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                <a href="{{ route('member.profil') }}" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ring-2 ring-forest-700/20 hover:ring-forest-700 transition-all" title="Profil Pelanggan">
                     <span class="material-symbols-outlined text-on-primary text-[18px]">
                         person
                     </span>
-                </div>
+                </a>
             </div>
         </div>
     </header>
@@ -734,9 +734,9 @@
                         <div class="flex flex-col gap-2 pt-2">
                             <a
                                 class="w-full bg-forest-700 hover:bg-forest-900 text-on-primary font-label-lg text-label-lg py-3 rounded-lg font-semibold text-center transition-colors"
-                                href="#"
+                                href="{{ route('member.pembayaran') }}"
                             >
-                                Menuju Konfirmasi Pembayaran →
+                                Menuju Instruksi &amp; Pembayaran →
                             </a>
 
                             <button
@@ -884,5 +884,6 @@
         }
     </script>
 
+    @include('partials.role-switcher')
 </body>
 </html>
