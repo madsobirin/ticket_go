@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Member\BookingController as MemberBookingController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use App\Http\Controllers\Operator\CityController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
@@ -28,9 +29,11 @@ Route::middleware('auth')->group(function () {
     // Member Area (Protected)
     Route::prefix('member')->as('member.')->middleware('role:member')->group(function () {
         Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/beranda', fn () => view('member.beranda'))->name('beranda');
-        Route::get('/jadwal', fn () => view('member.jadwal'))->name('cari-jadwal');
-        Route::get('/kursi', fn () => view('member.kursi'))->name('pilih-kursi');
+        Route::get('/beranda', [MemberDashboardController::class, 'index'])->name('beranda');
+        Route::get('/jadwal', [MemberBookingController::class, 'search'])->name('cari-jadwal');
+        Route::get('/kursi/{schedule}', [MemberBookingController::class, 'seatPicker'])->name('pilih-kursi');
+        Route::post('/booking', [MemberBookingController::class, 'store'])->name('booking.store');
+
         Route::get('/pesanan', fn () => view('member.pesanan'))->name('pesanan');
         Route::get('/pembayaran', fn () => view('member.pembayaran'))->name('pembayaran');
         Route::get('/konfirmasi-pembayaran', fn () => view('member.konfirmasi-pembayaran'))->name('konfirmasi-pembayaran');

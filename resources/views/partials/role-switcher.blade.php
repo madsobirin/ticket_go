@@ -32,7 +32,7 @@
                     <a href="{{ route('member.cari-jadwal') }}" class="px-2.5 py-1.5 rounded-lg bg-paper-0 hover:bg-forest-700 hover:text-white transition-all flex items-center gap-1.5 text-ink-900 border border-surface-container shadow-xs">
                         <span class="material-symbols-outlined text-[14px]">search</span> Melihat Jadwal
                     </a>
-                    <a href="{{ route('member.pilih-kursi') }}" class="px-2.5 py-1.5 rounded-lg bg-paper-0 hover:bg-forest-700 hover:text-white transition-all flex items-center gap-1.5 text-ink-900 border border-surface-container shadow-xs">
+                    <a href="{{ \App\Models\Schedule::first() ? route('member.pilih-kursi', \App\Models\Schedule::first()) : '#' }}" class="px-2.5 py-1.5 rounded-lg bg-paper-0 hover:bg-forest-700 hover:text-white transition-all flex items-center gap-1.5 text-ink-900 border border-surface-container shadow-xs">
                         <span class="material-symbols-outlined text-[14px]">airline_seat_recline_normal</span> Pilih Nomor Kursi
                     </a>
                     <a href="{{ route('member.pesanan') }}" class="px-2.5 py-1.5 rounded-lg bg-paper-0 hover:bg-forest-700 hover:text-white transition-all flex items-center gap-1.5 text-ink-900 border border-surface-container shadow-xs">

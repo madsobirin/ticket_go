@@ -460,7 +460,7 @@
                                 </button>
                             </div>
 
-                            <form id="filterForm" class="flex flex-col gap-5">
+                            <form id="filterForm" action="{{ route('member.cari-jadwal') }}" method="GET" class="flex flex-col gap-5">
 
                                 {{-- KOTA ASAL --}}
                                 <div class="flex flex-col gap-1.5">
@@ -469,11 +469,13 @@
                                     </label>
 
                                     <div class="relative">
-                                        <select id="filterKotaAsal" class="w-full bg-cream-50 text-ink-900 rounded-lg px-3.5 py-2.5 font-body-md text-body-md appearance-none focus:outline-none focus:bg-paper-0">
-                                            <option value="Bandar Lampung">Bandar Lampung (Rajabasa)</option>
-                                            <option value="Metro">Metro</option>
-                                            <option value="Pringsewu">Pringsewu</option>
-                                            <option value="Kotabumi">Kotabumi</option>
+                                        <select id="filterKotaAsal" name="kota_asal" class="w-full bg-cream-50 text-ink-900 rounded-lg px-3.5 py-2.5 font-body-md text-body-md appearance-none focus:outline-none focus:bg-paper-0">
+                                            <option value="">Semua Kota Asal</option>
+                                            @foreach ($cities ?? [] as $city)
+                                                <option value="{{ $city->name }}" {{ ($originName ?? '') === $city->name ? 'selected' : '' }}>
+                                                    {{ $city->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
 
                                         <span class="material-symbols-outlined absolute right-3 top-3 pointer-events-none text-ink-600 text-[20px]">
@@ -489,11 +491,13 @@
                                     </label>
 
                                     <div class="relative">
-                                        <select id="filterKotaTujuan" class="w-full bg-cream-50 text-ink-900 rounded-lg px-3.5 py-2.5 font-body-md text-body-md appearance-none focus:outline-none focus:bg-paper-0">
-                                            <option value="Krui">Krui (Pesisir Barat)</option>
-                                            <option value="Kotabumi">Kotabumi</option>
-                                            <option value="Kalianda">Kalianda (Bakauheni)</option>
-                                            <option value="Metro">Metro</option>
+                                        <select id="filterKotaTujuan" name="kota_tujuan" class="w-full bg-cream-50 text-ink-900 rounded-lg px-3.5 py-2.5 font-body-md text-body-md appearance-none focus:outline-none focus:bg-paper-0">
+                                            <option value="">Semua Kota Tujuan</option>
+                                            @foreach ($cities ?? [] as $city)
+                                                <option value="{{ $city->name }}" {{ ($destinationName ?? '') === $city->name ? 'selected' : '' }}>
+                                                    {{ $city->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
 
                                         <span class="material-symbols-outlined absolute right-3 top-3 pointer-events-none text-ink-600 text-[20px]">
@@ -501,6 +505,26 @@
                                         </span>
                                     </div>
                                 </div>
+
+                                {{-- TANGGAL --}}
+                                <div class="flex flex-col gap-1.5">
+                                    <label for="filterTglBerangkat" class="font-label-lg text-label-lg text-ink-600 font-medium">
+                                        Tanggal Keberangkatan
+                                    </label>
+                                    <input
+                                        type="date"
+                                        id="filterTglBerangkat"
+                                        name="tgl_berangkat"
+                                        value="{{ $departureDate ?? '' }}"
+                                        min="{{ date('Y-m-d') }}"
+                                        class="w-full bg-cream-50 text-ink-900 rounded-lg px-3.5 py-2.5 font-body-md text-body-md focus:outline-none focus:bg-paper-0"
+                                    >
+                                </div>
+
+                                <button type="submit" class="w-full py-2.5 bg-forest-700 hover:bg-forest-900 text-white font-semibold text-sm rounded-lg transition shadow-sm">
+                                    Terapkan Filter
+                                </button>
+                            </form>
 
                                 {{-- WAKTU KEBERANGKATAN --}}
                                 <div class="flex flex-col gap-2 pt-2">
@@ -601,9 +625,8 @@
                         {{-- DAFTAR KARTU JADWAL --}}
                         <div id="scheduleList" class="flex flex-col gap-4">
 
-                            @foreach ($jadwals as $jadwal)
-                                <article class="schedule-card bg-paper-0 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-5"
-                                         data-waktu="{{ $jadwal['waktu'] }}">
+                            @forelse ($schedules ?? [] as $schedule)
+                                <article class="schedule-card bg-paper-0 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-5">
 
                                     {{-- BAGIAN ATAS: RUTE DAN HARGA --}}
                                     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4">
@@ -611,28 +634,30 @@
                                         <div class="flex flex-col gap-1">
 
                                             <div class="flex items-center gap-2 text-forest-700 font-label-sm text-label-sm uppercase tracking-wider font-bold">
-                                                <span>{{ $jadwal['kategori'] }}</span>
+                                                <span>Travel Eksekutif</span>
                                                 <span>•</span>
-                                                <span>Kode Trayek {{ $jadwal['kode'] }}</span>
+                                                <span>Kode Jadwal #{{ $schedule->id }}</span>
                                             </div>
 
                                             <h3 class="font-headline-sm text-headline-sm text-forest-900 font-bold">
-                                                Bandar Lampung (Rajabasa)
+                                                {{ $schedule->route->origin->name }}
                                                 <span class="text-ink-600 mx-1">→</span>
-                                                Krui (Pesisir Barat)
+                                                {{ $schedule->route->destination->name }}
                                             </h3>
 
                                             <div class="flex flex-wrap items-center gap-3 text-ink-600 font-body-sm text-body-sm pt-1">
 
                                                 <span class="flex items-center gap-1 font-semibold text-ink-900">
                                                     <span class="material-symbols-outlined text-[16px] text-forest-700">schedule</span>
-                                                    {{ $jadwal['jam'] }} WIB
+                                                    {{ $schedule->departure_at->format('H:i') }} WIB
                                                 </span>
 
                                                 <span>•</span>
-                                                <span>Kamis, 24 Oktober 2024</span>
+                                                <span>{{ $schedule->departure_at->translatedFormat('l, d F Y') }}</span>
                                                 <span>•</span>
-                                                <span>Pool Terminal Rajabasa</span>
+                                                <span class="px-2 py-0.5 rounded text-xs font-semibold {{ $schedule->seatsLeft() > 0 ? 'bg-sage-100 text-forest-900' : 'bg-red-100 text-red-800' }}">
+                                                    Sisa {{ $schedule->seatsLeft() }} dari {{ $schedule->vehicle->seat_capacity }} Kursi
+                                                </span>
 
                                             </div>
                                         </div>
@@ -641,16 +666,16 @@
                                         <div class="sm:text-right flex flex-col sm:items-end justify-center bg-cream-50 sm:bg-transparent p-3 sm:p-0 rounded-lg">
 
                                             <span class="font-label-sm text-label-sm text-ink-600">
-                                                Tarif Resmi per Orang
+                                                Tarif Resmi per Kursi
                                             </span>
 
                                             <div class="font-numeric-price text-numeric-price text-amber-500 font-bold flex items-baseline gap-1">
-                                                Rp 120.000
+                                                Rp {{ number_format($schedule->price, 0, ',', '.') }}
                                                 <span class="font-body-sm text-body-sm text-ink-600 font-normal">/ kursi</span>
                                             </div>
 
                                             <span class="font-label-sm text-label-sm text-forest-700">
-                                                Termasuk Asuransi Jasa Raharja
+                                                Termasuk Asuransi Perjalanan
                                             </span>
                                         </div>
 
@@ -669,16 +694,18 @@
 
                                                 <div class="flex items-center gap-2">
                                                     <span class="font-title-sm text-title-sm text-forest-900 font-bold">
-                                                        {{ $jadwal['kendaraan'] }}
+                                                        {{ $schedule->vehicle->type }}
                                                     </span>
 
-                                                    <span class="px-2 py-0.5 rounded bg-sage-100 text-forest-900 font-label-sm text-label-sm font-semibold">
-                                                        {{ $jadwal['warna'] }}
-                                                    </span>
+                                                    @if ($schedule->vehicle->color)
+                                                        <span class="px-2 py-0.5 rounded bg-sage-100 text-forest-900 font-label-sm text-label-sm font-semibold">
+                                                            {{ $schedule->vehicle->color }}
+                                                        </span>
+                                                    @endif
                                                 </div>
 
                                                 <div class="flex items-center gap-2 text-ink-600 font-body-sm text-body-sm">
-                                                    <span>No. Polisi: <strong class="text-ink-900">{{ $jadwal['plat'] }}</strong></span>
+                                                    <span>No. Polisi: <strong class="text-ink-900 font-mono">{{ $schedule->vehicle->plate_number }}</strong></span>
                                                     <span>•</span>
                                                     <span>Full AC &amp; Reclining Seat</span>
                                                 </div>
@@ -694,11 +721,11 @@
 
                                             <div class="flex flex-col">
                                                 <span class="font-label-sm text-label-sm text-ink-600 uppercase font-semibold">
-                                                    Konfigurasi Kabin
+                                                    Kapasitas Armada
                                                 </span>
 
                                                 <span class="font-body-md text-body-md font-bold text-forest-900">
-                                                    Armada 5 Kursi Penumpang (Kursi 1–5)
+                                                    {{ $schedule->vehicle->seat_capacity }} Kursi Penumpang
                                                 </span>
                                             </div>
 
@@ -722,27 +749,38 @@
 
                                         </div>
 
-                                        <a href="{{ route('member.pilih-kursi') }}" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-forest-700 hover:bg-forest-900 text-on-primary font-label-lg text-label-lg font-medium transition-all shadow-sm group">
-                                            <span>Pilih Kursi</span>
-                                            <span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">
-                                                arrow_forward
-                                            </span>
-                                        </a>
+                                        @if ($schedule->seatsLeft() > 0)
+                                            <a href="{{ route('member.pilih-kursi', $schedule) }}" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-forest-700 hover:bg-forest-900 text-on-primary font-label-lg text-label-lg font-medium transition-all shadow-sm group">
+                                                <span>Pilih Kursi</span>
+                                                <span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">
+                                                    arrow_forward
+                                                </span>
+                                            </a>
+                                        @else
+                                            <button disabled class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-surface-container text-ink-600 font-label-lg text-label-lg font-medium cursor-not-allowed">
+                                                <span>Kursi Penuh</span>
+                                            </button>
+                                        @endif
 
                                     </div>
                                 </article>
-                            @endforeach
+                            @empty
+                                <div class="bg-paper-0 rounded-xl p-8 text-center shadow-sm">
+                                    <span class="material-symbols-outlined text-forest-700 text-4xl">event_busy</span>
+                                    <h3 class="font-title-md text-title-md text-forest-900 font-bold mt-3">
+                                        Jadwal Tidak Ditemukan
+                                    </h3>
+                                    <p class="font-body-sm text-body-sm text-ink-600 mt-1">
+                                        Tidak ada jadwal keberangkatan yang cocok dengan rute atau tanggal yang dipilih.
+                                    </p>
+                                </div>
+                            @endforelse
 
-                            {{-- PESAN JIKA JADWAL TIDAK DITEMUKAN --}}
-                            <div id="emptySchedule" class="hidden bg-paper-0 rounded-xl p-8 text-center shadow-sm">
-                                <span class="material-symbols-outlined text-forest-700 text-4xl">event_busy</span>
-                                <h3 class="font-title-md text-title-md text-forest-900 font-bold mt-3">
-                                    Jadwal Tidak Ditemukan
-                                </h3>
-                                <p class="font-body-sm text-body-sm text-ink-600 mt-1">
-                                    Tidak ada jadwal keberangkatan pada waktu yang dipilih.
-                                </p>
-                            </div>
+                            @if (isset($schedules) && $schedules->hasPages())
+                                <div class="p-4 bg-paper-0 rounded-xl shadow-sm">
+                                    {{ $schedules->links() }}
+                                </div>
+                            @endif
 
                         </div>
 
