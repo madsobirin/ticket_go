@@ -210,7 +210,7 @@
                         Member Terdaftar
                     </span>
                     <a href="{{ route('member.profil') }}" class="font-title-sm text-title-sm text-forest-900 hover:text-forest-700 transition-colors">
-                        Halo, Bambang Hermanto
+                        Halo, {{ auth()->user()->name ?? 'Member' }}
                     </a>
                 </div>
 
@@ -492,7 +492,7 @@
                                             </span>
 
                                             <p class="font-title-sm text-title-sm text-forest-900 mt-0.5">
-                                                Bambang Hermanto
+                                                {{ auth()->user()->name ?? 'Member' }}
                                             </p>
                                         </div>
 

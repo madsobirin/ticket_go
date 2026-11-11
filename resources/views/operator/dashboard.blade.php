@@ -73,7 +73,7 @@
                                     {{ $payment->booking->user->name }}
                                 </td>
                                 <td class="px-6 py-4 text-xs text-ink-600">
-                                    {{ $payment->booking->schedule->route->originCity->name }} &rarr; {{ $payment->booking->schedule->route->destinationCity->name }}
+                                    {{ $payment->booking->schedule->route->origin->name }} &rarr; {{ $payment->booking->schedule->route->destination->name }}
                                 </td>
                                 <td class="px-6 py-4 font-mono text-xs">
                                     {{ $payment->receipt_no }}

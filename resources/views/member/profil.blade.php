@@ -130,7 +130,7 @@
                     <span class="font-body-sm text-body-sm text-ink-600">Halo,</span>
                     <a href="{{ route('member.profil') }}"
                        class="font-title-sm text-title-sm text-forest-900 leading-none hover:text-forest-700 transition-colors">
-                        Bambang Hermanto
+                        {{ auth()->user()->name ?? 'Member' }}
                     </a>
                 </div>
 
@@ -206,7 +206,7 @@
                         <div class="flex flex-wrap items-center gap-2.5">
                             <h1 id="namaProfilTampil"
                             class="font-headline-lg text-2xl font-bold text-forest-900">
-                            Bambang Hermanto </h1>
+                            {{ auth()->user()->name ?? 'Member' }} </h1>
 
                             <span class="bg-green-700/15 text-green-700 text-xs font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
                                 <span class="material-symbols-outlined text-[13px]">verified</span>
@@ -215,11 +215,11 @@
                         </div>
 
                         <p class="text-xs text-ink-600 font-mono">
-                            @bambang_h • ID Member: <strong class="text-forest-700">#MBR-0081</strong>
+                            {{ auth()->user()->email ?? '' }} • ID Member: <strong class="text-forest-700">#MBR-{{ str_pad(auth()->id() ?? 1, 4, '0', STR_PAD_LEFT) }}</strong>
                         </p>
 
                         <p class="text-xs text-ink-600">
-                            Bergabung sejak 12 Oktober 2024 • Penumpang Resmi Lampung
+                            Bergabung sejak {{ auth()->user()?->created_at?->translatedFormat('d F Y') ?? '12 Oktober 2024' }} • Penumpang Resmi Lampung
                         </p>
                     </div>
                 </div>
@@ -292,15 +292,15 @@
                                 <label class="block font-bold text-forest-900 uppercase tracking-wider mb-1">
                                     Nama Lengkap (Sesuai KTP) <span class="text-red-600">*</span>
                                 </label>
-                                <input id="profNama" type="text" value="Bambang Hermanto"
+                                <input id="profNama" type="text" value="{{ auth()->user()->name ?? '' }}"
                                        class="w-full bg-surface-container-low focus:bg-paper-0 p-3 rounded-xl border border-surface-container text-forest-900 font-semibold" required>
                             </div>
 
                             <div>
                                 <label class="block font-bold text-forest-900 uppercase tracking-wider mb-1">
-                                    Username Akun <span class="text-red-600">*</span>
+                                    Email Akun <span class="text-red-600">*</span>
                                 </label>
-                                <input id="profUsername" type="text" value="bambang_h"
+                                <input id="profEmail" type="email" value="{{ auth()->user()->email ?? '' }}"
                                        class="w-full bg-surface-container-low focus:bg-paper-0 p-3 rounded-xl border border-surface-container text-forest-900 font-semibold" required>
                             </div>
                         </div>
@@ -310,7 +310,7 @@
                                 <label class="block font-bold text-forest-900 uppercase tracking-wider mb-1">
                                     Nomor WhatsApp / HP <span class="text-red-600">*</span>
                                 </label>
-                                <input id="profHp" type="tel" value="081234567890"
+                                <input id="profHp" type="tel" value="{{ auth()->user()->phone ?? '' }}"
                                        class="w-full bg-surface-container-low focus:bg-paper-0 p-3 rounded-xl border border-surface-container text-forest-900 font-mono font-semibold" required>
                             </div>
 

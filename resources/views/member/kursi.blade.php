@@ -99,7 +99,7 @@
                 <div class="hidden sm:flex flex-col text-right">
                     <span class="text-xs text-ink-600">Member Terdaftar</span>
                     <a href="{{ route('member.profil') }}" class="text-sm font-semibold text-forest-900 hover:text-forest-700 transition-colors">
-                        Halo, Bambang Hermanto
+                        Halo, {{ auth()->user()->name ?? 'Member' }}
                     </a>
                 </div>
 

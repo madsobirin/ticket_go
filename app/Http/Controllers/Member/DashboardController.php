@@ -16,7 +16,7 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         $recentBookings = $user->bookings()
-            ->with(['schedule.route.originCity', 'schedule.route.destinationCity', 'payment'])
+            ->with(['schedule.route.origin', 'schedule.route.destination', 'payment'])
             ->latest()
             ->take(5)
             ->get();
