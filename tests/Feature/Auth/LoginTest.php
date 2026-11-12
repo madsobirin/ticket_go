@@ -1,16 +1,18 @@
 <?php
 
-use App\Enums\UserRole;
-use App\Models\User;
+use App\Models\Member;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('user can log in with username and password', function () {
-    $user = User::factory()->create([
+test('member can log in with username and password', function () {
+    $member = Member::create([
+        'nama' => 'Hendra Setiawan',
+        'alamat' => 'Bandar Lampung',
+        'telepon' => '081234567890',
+        'jen_kelamin' => 'L',
         'username' => 'hendra01',
         'password' => 'secret123',
-        'role' => UserRole::Member,
     ]);
 
     $response = $this->post('/login', [
@@ -19,57 +21,15 @@ test('user can log in with username and password', function () {
     ]);
 
     $response->assertRedirect(route('member.dashboard'));
-    $this->assertAuthenticatedAs($user);
-});
-
-test('user can log in with email and password', function () {
-    $user = User::factory()->create([
-        'email' => 'hendra@lintas.test',
-        'password' => 'secret123',
-        'role' => UserRole::Member,
-    ]);
-
-    $response = $this->post('/login', [
-        'username' => 'hendra@lintas.test',
-        'password' => 'secret123',
-    ]);
-
-    $response->assertRedirect(route('member.dashboard'));
-    $this->assertAuthenticatedAs($user);
-});
-
-test('admin login redirects to admin dashboard', function () {
-    $admin = User::factory()->admin()->create([
-        'username' => 'admin_utama',
-        'password' => 'secret123',
-    ]);
-
-    $response = $this->post('/login', [
-        'username' => 'admin_utama',
-        'password' => 'secret123',
-    ]);
-
-    $response->assertRedirect(route('admin.dashboard'));
-    $this->assertAuthenticatedAs($admin);
-});
-
-test('operator login redirects to operator dashboard', function () {
-    $operator = User::factory()->operator()->create([
-        'username' => 'operator_loket1',
-        'password' => 'secret123',
-    ]);
-
-    $response = $this->post('/login', [
-        'username' => 'operator_loket1',
-        'password' => 'secret123',
-    ]);
-
-    $response->assertRedirect(route('operator.dashboard'));
-    $this->assertAuthenticatedAs($operator);
+    $this->assertAuthenticatedAs($member);
 });
 
 test('login fails with invalid credentials', function () {
-    User::factory()->create([
+    Member::create([
+        'nama' => 'Hendra Setiawan',
+        'alamat' => 'Bandar Lampung',
+        'telepon' => '081234567890',
+        'jen_kelamin' => 'L',
         'username' => 'hendra01',
         'password' => 'secret123',
     ]);
@@ -85,9 +45,16 @@ test('login fails with invalid credentials', function () {
 });
 
 test('authenticated user can log out', function () {
-    $user = User::factory()->create();
+    $member = Member::create([
+        'nama' => 'Hendra Setiawan',
+        'alamat' => 'Bandar Lampung',
+        'telepon' => '081234567890',
+        'jen_kelamin' => 'L',
+        'username' => 'hendra01',
+        'password' => 'secret123',
+    ]);
 
-    $response = $this->actingAs($user)->post('/logout');
+    $response = $this->actingAs($member)->post('/logout');
 
     $response->assertRedirect(route('login'));
     $this->assertGuest();

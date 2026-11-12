@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Member\BookingController as MemberBookingController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
+use App\Http\Controllers\Member\PaymentController as MemberPaymentController;
 use App\Http\Controllers\Operator\CityController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
 use App\Http\Controllers\Operator\RouteController;
@@ -35,8 +36,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/booking', [MemberBookingController::class, 'store'])->name('booking.store');
 
         Route::get('/pesanan', fn () => view('member.pesanan'))->name('pesanan');
-        Route::get('/pembayaran', fn () => view('member.pembayaran'))->name('pembayaran');
-        Route::get('/konfirmasi-pembayaran', fn () => view('member.konfirmasi-pembayaran'))->name('konfirmasi-pembayaran');
+        Route::get('/pembayaran', [MemberPaymentController::class, 'show'])->name('pembayaran');
+        Route::get('/konfirmasi-pembayaran', [MemberPaymentController::class, 'confirmationForm'])->name('konfirmasi-pembayaran');
+        Route::post('/konfirmasi-pembayaran', [MemberPaymentController::class, 'storeConfirmation'])->name('konfirmasi-pembayaran.store');
         Route::get('/keluhan', fn () => view('member.keluhan'))->name('keluhan');
         Route::get('/profil', fn () => view('member.profil'))->name('profil');
     });

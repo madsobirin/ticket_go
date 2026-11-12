@@ -155,15 +155,33 @@
                         </div>
                     </div>
 
-                    <form id="formKonfirmasi" onsubmit="handleKonfirmasiSubmit(event)" class="space-y-6">
+                    <form id="formKonfirmasi" method="POST" action="{{ route('member.konfirmasi-pembayaran.store') }}" class="space-y-6">
+                        @csrf
+
+                        @if ($errors->any())
+                            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs space-y-1">
+                                <span class="font-bold block">Ada kesalahan pada pengisian form:</span>
+                                <ul class="list-disc list-inside">
+                                    @foreach ($errors->all() as $err)
+                                        <li>{{ $err }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <!-- ID PEMESANAN -->
                         <div>
                             <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="id_pesan">
                                 ID Pemesanan Tiket <span class="text-red-600">*</span>
                             </label>
                             <select id="id_pesan" name="id_pesan" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3.5 text-sm text-forest-900 font-medium transition-all" required>
-                                <option value="PSN-202410-098" selected>#PSN-202410-098 - Bandar Lampung → Krui (Rp 120.354 - Belum Bayar)</option>
-                                <option value="PSN-202410-099">#PSN-202410-099 - Bandar Lampung → Metro (Rp 45.000 - Belum Bayar)</option>
+                                @forelse ($unpaidBookings ?? [] as $bk)
+                                    <option value="{{ $bk->id_pesan }}">
+                                        #PSN-{{ str_pad($bk->id_pesan, 4, '0', STR_PAD_LEFT) }} - {{ $bk->jadwal->kotaAsal->nm_kota_asal ?? 'Asal' }} → {{ $bk->jadwal->kotaTujuan->nm_kota_tujuan ?? 'Tujuan' }} (Kursi {{ $bk->nomor_kursi }} • Rp {{ number_format($bk->jadwal->harga ?? 0, 0, ',', '.') }})
+                                    </option>
+                                @empty
+                                    <option value="">Tidak ada tiket yang menunggu pembayaran</option>
+                                @endforelse
                             </select>
                             <span class="text-[11px] text-ink-600 mt-1 block">Pilih pesanan yang ingin Anda konfirmasikan pembayarannya.</span>
                         </div>
