@@ -149,13 +149,13 @@
 
                         <div>
                             <div class="flex items-center gap-2">
-                                <span class="font-headline text-xl font-semibold">Rajabasa (TKG)</span>
+                                <span class="font-headline text-xl font-semibold">{{ $schedule->kotaAsal->nm_kota_asal ?? 'Kota Asal' }}</span>
                                 <span class="material-symbols-outlined text-amber-500">arrow_forward</span>
-                                <span class="font-headline text-xl font-semibold">Krui (PSB)</span>
+                                <span class="font-headline text-xl font-semibold">{{ $schedule->kotaTujuan->nm_kota_tujuan ?? 'Kota Tujuan' }}</span>
                             </div>
 
                             <span class="text-xs text-green-200 uppercase tracking-wider">
-                                Lintas Barat Trans Sumatra • Shuttle Reguler
+                                Lintas Lampung Shuttle • Reguler Executive
                             </span>
                         </div>
                     </div>
@@ -163,12 +163,12 @@
                     <div class="flex flex-wrap items-center gap-6 text-sm">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-amber-500">calendar_today</span>
-                            Kamis, 24 Oktober 2024
+                            {{ $schedule->tgl_berangkat ? \Carbon\Carbon::parse($schedule->tgl_berangkat)->translatedFormat('l, d F Y') : '-' }}
                         </div>
 
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-amber-500">schedule</span>
-                            08:00 WIB
+                            {{ substr($schedule->jam_berangkat, 0, 5) }} WIB
                         </div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-forest-700">airport_shuttle</span>
                         <span class="font-medium text-ink-900">Armada:</span>
-                        Toyota HiAce Commuter (BE 7012 AA, Silver)
+                        {{ $schedule->kendaraan->jenis_mobil ?? 'Travel' }} ({{ $schedule->kendaraan->nomor_polisi ?? '-' }}{{ $schedule->kendaraan?->warna_mobil ? ', '.$schedule->kendaraan->warna_mobil : '' }})
                     </div>
 
                     <div class="flex flex-wrap items-center gap-4">
@@ -450,21 +450,21 @@
                             <div class="flex items-start justify-between gap-4">
                                 <span class="text-ink-600">Rute Perjalanan</span>
                                 <span class="font-semibold text-right">
-                                    {{ $schedule->route->origin->name ?? 'Kota Asal' }} → {{ $schedule->route->destination->name ?? 'Kota Tujuan' }}
+                                    {{ $schedule->kotaAsal->nm_kota_asal ?? 'Kota Asal' }} → {{ $schedule->kotaTujuan->nm_kota_tujuan ?? 'Kota Tujuan' }}
                                 </span>
                             </div>
 
                             <div class="flex items-start justify-between gap-4">
                                 <span class="text-ink-600">Jadwal Keberangkatan</span>
                                 <span class="font-semibold text-right">
-                                    {{ $schedule->departure_at ? $schedule->departure_at->translatedFormat('d M Y • H:i') . ' WIB' : '-' }}
+                                    {{ $schedule->tgl_berangkat ? \Carbon\Carbon::parse($schedule->tgl_berangkat)->translatedFormat('d M Y') : '-' }} • {{ substr($schedule->jam_berangkat, 0, 5) }} WIB
                                 </span>
                             </div>
 
                             <div class="flex items-start justify-between gap-4">
                                 <span class="text-ink-600">Armada Kendaraan</span>
                                 <span class="font-semibold text-right">
-                                    {{ $schedule->vehicle->type ?? 'Mobil Travel' }} ({{ $schedule->vehicle->plate_number ?? '-' }})
+                                    {{ $schedule->kendaraan->jenis_mobil ?? 'Mobil Travel' }} ({{ $schedule->kendaraan->nomor_polisi ?? '-' }})
                                 </span>
                             </div>
 
@@ -514,16 +514,16 @@
                             <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
 
                                 <div class="w-8 h-8 rounded-full bg-forest-700 text-white flex items-center justify-center font-bold text-xs uppercase">
-                                    {{ substr(auth()->user()->name ?? 'P', 0, 2) }}
+                                    {{ substr(auth()->user()->nama ?? auth()->user()->name ?? 'P', 0, 2) }}
                                 </div>
 
                                 <div class="flex-1 min-w-0">
                                     <span class="font-semibold text-forest-900 block truncate">
-                                        {{ auth()->user()->name ?? 'Penumpang' }}
+                                        {{ auth()->user()->nama ?? auth()->user()->name ?? 'Penumpang' }}
                                     </span>
 
                                     <span class="text-ink-600">
-                                        {{ auth()->user()->phone ?? auth()->user()->email }}
+                                        {{ auth()->user()->telepon ?? auth()->user()->phone ?? auth()->user()->email ?? '' }}
                                     </span>
                                 </div>
 
@@ -540,7 +540,7 @@
 
                             <div class="flex items-center justify-between">
                                 <span class="text-ink-600">Tarif Tiket Resmi</span>
-                                <span class="font-medium">Rp {{ number_format($schedule->price ?? 0, 0, ',', '.') }}</span>
+                                <span class="font-medium">Rp {{ number_format($schedule->harga ?? 0, 0, ',', '.') }}</span>
                             </div>
 
                             <div class="flex items-center justify-between">
@@ -551,7 +551,7 @@
                             <div class="flex items-center justify-between pt-2">
                                 <span class="font-semibold text-forest-900">Total Pembayaran</span>
                                 <span class="font-headline text-xl font-bold text-forest-900">
-                                    Rp {{ number_format($schedule->price ?? 0, 0, ',', '.') }}
+                                    Rp {{ number_format($schedule->harga ?? 0, 0, ',', '.') }}
                                 </span>
                             </div>
 
@@ -564,7 +564,7 @@
                         <!-- FORM SUBMIT BOOKING -->
                         <form id="bookingForm" method="POST" action="{{ route('member.booking.store') }}" class="space-y-3 pt-2">
                             @csrf
-                            <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
+                            <input type="hidden" name="schedule_id" value="{{ $schedule->id_jadwal }}">
                             <input type="hidden" name="seat_number" id="input_seat_number" value="">
 
                             @if (session('error'))

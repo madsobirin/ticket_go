@@ -471,9 +471,9 @@
                                     <div class="relative">
                                         <select id="filterKotaAsal" name="kota_asal" class="w-full bg-cream-50 text-ink-900 rounded-lg px-3.5 py-2.5 font-body-md text-body-md appearance-none focus:outline-none focus:bg-paper-0">
                                             <option value="">Semua Kota Asal</option>
-                                            @foreach ($cities ?? [] as $city)
-                                                <option value="{{ $city->name }}" {{ ($originName ?? '') === $city->name ? 'selected' : '' }}>
-                                                    {{ $city->name }}
+                                            @foreach ($kotaAsalList ?? [] as $asal)
+                                                <option value="{{ $asal->nm_kota_asal }}" {{ ($originName ?? '') === $asal->nm_kota_asal ? 'selected' : '' }}>
+                                                    {{ $asal->nm_kota_asal }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -493,9 +493,9 @@
                                     <div class="relative">
                                         <select id="filterKotaTujuan" name="kota_tujuan" class="w-full bg-cream-50 text-ink-900 rounded-lg px-3.5 py-2.5 font-body-md text-body-md appearance-none focus:outline-none focus:bg-paper-0">
                                             <option value="">Semua Kota Tujuan</option>
-                                            @foreach ($cities ?? [] as $city)
-                                                <option value="{{ $city->name }}" {{ ($destinationName ?? '') === $city->name ? 'selected' : '' }}>
-                                                    {{ $city->name }}
+                                            @foreach ($kotaTujuanList ?? [] as $tujuan)
+                                                <option value="{{ $tujuan->nm_kota_tujuan }}" {{ ($destinationName ?? '') === $tujuan->nm_kota_tujuan ? 'selected' : '' }}>
+                                                    {{ $tujuan->nm_kota_tujuan }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -636,27 +636,27 @@
                                             <div class="flex items-center gap-2 text-forest-700 font-label-sm text-label-sm uppercase tracking-wider font-bold">
                                                 <span>Travel Eksekutif</span>
                                                 <span>•</span>
-                                                <span>Kode Jadwal #{{ $schedule->id }}</span>
+                                                <span>Kode Jadwal #{{ $schedule->id_jadwal }}</span>
                                             </div>
 
                                             <h3 class="font-headline-sm text-headline-sm text-forest-900 font-bold">
-                                                {{ $schedule->route->origin->name }}
+                                                {{ $schedule->kotaAsal->nm_kota_asal ?? 'Kota Asal' }}
                                                 <span class="text-ink-600 mx-1">→</span>
-                                                {{ $schedule->route->destination->name }}
+                                                {{ $schedule->kotaTujuan->nm_kota_tujuan ?? 'Kota Tujuan' }}
                                             </h3>
 
                                             <div class="flex flex-wrap items-center gap-3 text-ink-600 font-body-sm text-body-sm pt-1">
 
                                                 <span class="flex items-center gap-1 font-semibold text-ink-900">
                                                     <span class="material-symbols-outlined text-[16px] text-forest-700">schedule</span>
-                                                    {{ $schedule->departure_at->format('H:i') }} WIB
+                                                    {{ substr($schedule->jam_berangkat, 0, 5) }} WIB
                                                 </span>
 
                                                 <span>•</span>
-                                                <span>{{ $schedule->departure_at->translatedFormat('l, d F Y') }}</span>
+                                                <span>{{ $schedule->tgl_berangkat ? \Carbon\Carbon::parse($schedule->tgl_berangkat)->translatedFormat('l, d F Y') : '-' }}</span>
                                                 <span>•</span>
                                                 <span class="px-2 py-0.5 rounded text-xs font-semibold {{ $schedule->seatsLeft() > 0 ? 'bg-sage-100 text-forest-900' : 'bg-red-100 text-red-800' }}">
-                                                    Sisa {{ $schedule->seatsLeft() }} dari {{ $schedule->vehicle->seat_capacity }} Kursi
+                                                    Sisa {{ $schedule->seatsLeft() }} dari 5 Kursi
                                                 </span>
 
                                             </div>
@@ -670,7 +670,7 @@
                                             </span>
 
                                             <div class="font-numeric-price text-numeric-price text-amber-500 font-bold flex items-baseline gap-1">
-                                                Rp {{ number_format($schedule->price, 0, ',', '.') }}
+                                                Rp {{ number_format($schedule->harga, 0, ',', '.') }}
                                                 <span class="font-body-sm text-body-sm text-ink-600 font-normal">/ kursi</span>
                                             </div>
 
@@ -694,18 +694,18 @@
 
                                                 <div class="flex items-center gap-2">
                                                     <span class="font-title-sm text-title-sm text-forest-900 font-bold">
-                                                        {{ $schedule->vehicle->type }}
+                                                        {{ $schedule->kendaraan->jenis_mobil ?? 'Travel' }}
                                                     </span>
 
-                                                    @if ($schedule->vehicle->color)
+                                                    @if ($schedule->kendaraan?->warna_mobil)
                                                         <span class="px-2 py-0.5 rounded bg-sage-100 text-forest-900 font-label-sm text-label-sm font-semibold">
-                                                            {{ $schedule->vehicle->color }}
+                                                            {{ $schedule->kendaraan->warna_mobil }}
                                                         </span>
                                                     @endif
                                                 </div>
 
                                                 <div class="flex items-center gap-2 text-ink-600 font-body-sm text-body-sm">
-                                                    <span>No. Polisi: <strong class="text-ink-900 font-mono">{{ $schedule->vehicle->plate_number }}</strong></span>
+                                                    <span>No. Polisi: <strong class="text-ink-900 font-mono">{{ $schedule->kendaraan->nomor_polisi ?? '-' }}</strong></span>
                                                     <span>•</span>
                                                     <span>Full AC &amp; Reclining Seat</span>
                                                 </div>
@@ -725,7 +725,7 @@
                                                 </span>
 
                                                 <span class="font-body-md text-body-md font-bold text-forest-900">
-                                                    {{ $schedule->vehicle->seat_capacity }} Kursi Penumpang
+                                                    5 Kursi Penumpang
                                                 </span>
                                             </div>
 
