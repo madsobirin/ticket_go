@@ -38,10 +38,10 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100'],
-            'email' => ['required', 'string', 'email', 'max:100', 'unique:users,email'],
-            'username' => ['required', 'string', 'alpha_dash:ascii', 'min:3', 'max:30', 'unique:users,username'],
+            'email' => ['nullable', 'string', 'email', 'max:100'],
+            'username' => ['required', 'string', 'alpha_dash:ascii', 'min:3', 'max:30', 'unique:member,username'],
             'phone' => ['required', 'string', 'min:8', 'max:20'],
-            'address' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:100'],
             'gender' => ['required', Rule::in(['L', 'P'])],
             'password' => ['required', 'string', 'min:6'],
         ];

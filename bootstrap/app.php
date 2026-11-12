@@ -17,10 +17,15 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => EnsureRole::class,
         ]);
 
-        $middleware->redirectUsersTo(fn ($request) => match ($request->user()?->role?->value) {
-            'admin' => route('admin.dashboard'),
-            'operator' => route('operator.dashboard'),
-            default => route('member.dashboard'),
+        $middleware->redirectUsersTo(function ($request) {
+            $role = $request->user()?->role;
+            $roleValue = is_object($role) && property_exists($role, 'value') ? $role->value : (string) $role;
+
+            return match ($roleValue) {
+                'admin' => route('admin.dashboard'),
+                'operator' => route('operator.dashboard'),
+                default => route('member.dashboard'),
+            };
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
