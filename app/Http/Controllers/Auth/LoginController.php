@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -26,11 +25,8 @@ class LoginController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $loginInput = $request->input('username');
-        $field = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-
         $credentials = [
-            $field => $loginInput,
+            'username' => $request->input('username'),
             'password' => $request->input('password'),
         ];
 
@@ -42,13 +38,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        $user = Auth::user();
-
-        return match ($user->role) {
-            UserRole::Admin => redirect()->intended(route('admin.dashboard')),
-            UserRole::Operator => redirect()->intended(route('operator.dashboard')),
-            default => redirect()->intended(route('member.dashboard')),
-        };
+        return redirect()->intended(route('member.dashboard'));
     }
 
     /**

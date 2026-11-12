@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
-use App\Models\City;
+use App\Models\KotaAsal;
+use App\Models\KotaTujuan;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -15,18 +16,17 @@ class DashboardController extends Controller
     public function index(Request $request): View
     {
         $user = $request->user();
-        $recentBookings = $user->bookings()
-            ->with(['schedule.route.origin', 'schedule.route.destination', 'payment'])
-            ->latest()
-            ->take(5)
-            ->get();
+        $recentBookings = collect();
 
-        $cities = City::orderBy('name')->get();
+        $kotaAsal = KotaAsal::orderBy('nm_kota_asal')->get();
+        $kotaTujuan = KotaTujuan::orderBy('nm_kota_tujuan')->get();
 
         return view('member.beranda', [
             'user' => $user,
             'recentBookings' => $recentBookings,
-            'cities' => $cities,
+            'cities' => $kotaAsal,
+            'kotaAsal' => $kotaAsal,
+            'kotaTujuan' => $kotaTujuan,
         ]);
     }
 }

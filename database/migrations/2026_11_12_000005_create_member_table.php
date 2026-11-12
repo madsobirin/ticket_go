@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->string("alamat", 100);
             $table->string("telepon", 20);
             $table->enum("jen_kelamin", ["L", "P"]);
-            $table->string("username", 20);
-            $table->string("password", 20);
+            $table->string("username", 50)->unique();
+            $table->string("password", 255);
         });
     }
 

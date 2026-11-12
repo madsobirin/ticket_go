@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Models\User;
+use App\Models\Member;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class RegisterController extends Controller
@@ -17,7 +15,7 @@ class RegisterController extends Controller
      */
     public function show(): View
     {
-        return view('welcome');
+        return view("welcome");
     }
 
     /**
@@ -27,24 +25,20 @@ class RegisterController extends Controller
     {
         $validated = $request->validated();
 
-        $user = new User([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'username' => $validated['username'],
-            'phone' => $validated['phone'],
-            'address' => $validated['address'],
-            'gender' => $validated['gender'],
-            'password' => $validated['password'],
+        Member::create([
+            "nama" => $validated["name"],
+            "alamat" => $validated["address"],
+            "telepon" => $validated["phone"],
+            "jen_kelamin" => $validated["gender"],
+            "username" => $validated["username"],
+            "password" => $validated["password"],
         ]);
 
-        // Peran selalu dipaksa ke Member untuk keamanan pendaftaran publik
-        $user->role = UserRole::Member;
-        $user->save();
-
-        Auth::login($user);
-
         return redirect()
-            ->route('member.dashboard')
-            ->with('status', 'Pendaftaran berhasil! Selamat datang di Lintas Lampung.');
+            ->route("login")
+            ->with(
+                "status",
+                "Pendaftaran akun member berhasil! Silakan masuk.",
+            );
     }
 }
