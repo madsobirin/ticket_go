@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
         $todayBookingsCount = Booking::whereDate('created_at', today())->count();
 
-        $recentPayments = Payment::with(['booking.user', 'booking.schedule.route.originCity', 'booking.schedule.route.destinationCity'])
+        $recentPayments = Payment::with(['booking.user', 'booking.schedule.route.origin', 'booking.schedule.route.destination'])
             ->latest()
             ->take(6)
             ->get();

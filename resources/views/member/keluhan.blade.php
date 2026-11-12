@@ -138,7 +138,7 @@
 
                 <a href="{{ route('member.profil') }}"
                    class="font-title-sm text-title-sm text-forest-900 leading-none hover:text-forest-700 transition-colors">
-                    {{ session('auth_user.name', 'Bambang Hermanto') }}
+                    {{ auth()->user()->name ?? 'Member' }}
                 </a>
             </div>
 

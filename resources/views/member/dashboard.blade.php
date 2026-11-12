@@ -70,7 +70,7 @@
                                 </span>
                             </div>
                             <p class="text-sm font-bold text-ink-900">
-                                {{ $booking->schedule->route->originCity->name }} &rarr; {{ $booking->schedule->route->destinationCity->name }}
+                                {{ $booking->schedule->route->origin->name }} &rarr; {{ $booking->schedule->route->destination->name }}
                             </p>
                             <p class="text-xs text-ink-600">
                                 Berangkat: {{ $booking->schedule->departure_at->translatedFormat('d M Y, H:i') }} WIB

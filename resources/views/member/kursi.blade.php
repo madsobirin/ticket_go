@@ -99,7 +99,7 @@
                 <div class="hidden sm:flex flex-col text-right">
                     <span class="text-xs text-ink-600">Member Terdaftar</span>
                     <a href="{{ route('member.profil') }}" class="text-sm font-semibold text-forest-900 hover:text-forest-700 transition-colors">
-                        Halo, Bambang Hermanto
+                        Halo, {{ auth()->user()->name ?? 'Member' }}
                     </a>
                 </div>
 
@@ -261,16 +261,27 @@
                                     <span class="text-[10px]">Kabin Kendali</span>
                                 </div>
 
-                                <button
-                                    type="button"
-                                    class="seat-choice group relative flex flex-col items-center justify-center p-3.5 rounded-lg bg-white shadow-sm hover:shadow-md transition-all"
-                                    id="seat-btn-1"
-                                    onclick="selectSeat(1, 'Kursi No. 1', 'Depan Samping Supir')"
-                                >
-                                    <span class="material-symbols-outlined text-2xl text-ink-600">airline_seat_recline_normal</span>
-                                    <span class="seat-title font-semibold mt-1">Kursi 1</span>
-                                    <span class="seat-sub text-xs text-ink-600">Depan Samping</span>
-                                </button>
+                                @if (in_array(1, $occupiedSeats ?? []))
+                                    <div class="relative seat-choice flex flex-col items-center justify-center p-3.5 rounded-lg bg-gray-300 text-gray-600 cursor-not-allowed">
+                                        <span class="material-symbols-outlined text-2xl opacity-40">airline_seat_recline_normal</span>
+                                        <span class="font-semibold mt-1 opacity-50">Kursi 1</span>
+                                        <span class="text-xs opacity-60">Depan Samping</span>
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black/5 rounded-lg">
+                                            <span class="bg-gray-600/80 text-white text-[10px] px-2 py-0.5 rounded uppercase">Terisi</span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <button
+                                        type="button"
+                                        class="seat-choice group relative flex flex-col items-center justify-center p-3.5 rounded-lg bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"
+                                        id="seat-btn-1"
+                                        onclick="selectSeat(1, 'Kursi No. 1', 'Depan Samping Supir')"
+                                    >
+                                        <span class="material-symbols-outlined text-2xl text-ink-600">airline_seat_recline_normal</span>
+                                        <span class="seat-title font-semibold mt-1">Kursi 1</span>
+                                        <span class="seat-sub text-xs text-ink-600">Depan Samping</span>
+                                    </button>
+                                @endif
 
                             </div>
                         </div>
@@ -285,30 +296,49 @@
 
                             <div class="grid grid-cols-2 gap-4">
 
-                                <div class="relative seat-choice flex flex-col items-center justify-center p-3.5 rounded-lg bg-gray-300 text-gray-600 cursor-not-allowed">
-                                    <span class="material-symbols-outlined text-2xl opacity-40">airline_seat_recline_normal</span>
-                                    <span class="font-semibold mt-1 opacity-50">Kursi 2</span>
-                                    <span class="text-xs opacity-60">Jendela Kiri</span>
-
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/5 rounded-lg">
-                                        <span class="bg-gray-600/80 text-white text-[10px] px-2 py-0.5 rounded uppercase">Terisi</span>
+                                @if (in_array(2, $occupiedSeats ?? []))
+                                    <div class="relative seat-choice flex flex-col items-center justify-center p-3.5 rounded-lg bg-gray-300 text-gray-600 cursor-not-allowed">
+                                        <span class="material-symbols-outlined text-2xl opacity-40">airline_seat_recline_normal</span>
+                                        <span class="font-semibold mt-1 opacity-50">Kursi 2</span>
+                                        <span class="text-xs opacity-60">Jendela Kiri</span>
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black/5 rounded-lg">
+                                            <span class="bg-gray-600/80 text-white text-[10px] px-2 py-0.5 rounded uppercase">Terisi</span>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <button
+                                        type="button"
+                                        class="seat-choice group relative flex flex-col items-center justify-center p-3.5 rounded-lg bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"
+                                        id="seat-btn-2"
+                                        onclick="selectSeat(2, 'Kursi No. 2', 'Baris Tengah - Sisi Kiri')"
+                                    >
+                                        <span class="material-symbols-outlined text-2xl text-ink-600">airline_seat_recline_normal</span>
+                                        <span class="seat-title font-semibold mt-1">Kursi 2</span>
+                                        <span class="seat-sub text-xs text-ink-600">Jendela Kiri</span>
+                                    </button>
+                                @endif
 
-                                <button
-                                    type="button"
-                                    class="seat-choice group relative flex flex-col items-center justify-center p-3.5 rounded-lg bg-forest-700 text-white shadow-md transition-all"
-                                    id="seat-btn-3"
-                                    onclick="selectSeat(3, 'Kursi No. 3', 'Baris Tengah - Sisi Kanan')"
-                                >
-                                    <span class="seat-check-badge absolute -top-2 -right-2 w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-sm">
-                                        <span class="material-symbols-outlined text-sm">check</span>
-                                    </span>
-
-                                    <span class="material-symbols-outlined text-2xl">airline_seat_recline_normal</span>
-                                    <span class="seat-title font-bold mt-1">Kursi 3</span>
-                                    <span class="seat-sub text-xs text-green-200">Jendela Kanan</span>
-                                </button>
+                                @if (in_array(3, $occupiedSeats ?? []))
+                                    <div class="relative seat-choice flex flex-col items-center justify-center p-3.5 rounded-lg bg-gray-300 text-gray-600 cursor-not-allowed">
+                                        <span class="material-symbols-outlined text-2xl opacity-40">airline_seat_recline_normal</span>
+                                        <span class="font-semibold mt-1 opacity-50">Kursi 3</span>
+                                        <span class="text-xs opacity-60">Jendela Kanan</span>
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black/5 rounded-lg">
+                                            <span class="bg-gray-600/80 text-white text-[10px] px-2 py-0.5 rounded uppercase">Terisi</span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <button
+                                        type="button"
+                                        class="seat-choice group relative flex flex-col items-center justify-center p-3.5 rounded-lg bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"
+                                        id="seat-btn-3"
+                                        onclick="selectSeat(3, 'Kursi No. 3', 'Baris Tengah - Sisi Kanan')"
+                                    >
+                                        <span class="material-symbols-outlined text-2xl text-ink-600">airline_seat_recline_normal</span>
+                                        <span class="seat-title font-semibold mt-1">Kursi 3</span>
+                                        <span class="seat-sub text-xs text-ink-600">Jendela Kanan</span>
+                                    </button>
+                                @endif
 
                             </div>
                         </div>
@@ -323,26 +353,49 @@
 
                             <div class="grid grid-cols-2 gap-4">
 
-                                <button
-                                    type="button"
-                                    class="seat-choice group relative flex flex-col items-center justify-center p-3.5 rounded-lg bg-white shadow-sm hover:shadow-md transition-all"
-                                    id="seat-btn-4"
-                                    onclick="selectSeat(4, 'Kursi No. 4', 'Baris Belakang - Sisi Kiri')"
-                                >
-                                    <span class="material-symbols-outlined text-2xl text-ink-600">airline_seat_recline_normal</span>
-                                    <span class="seat-title font-semibold mt-1">Kursi 4</span>
-                                    <span class="seat-sub text-xs text-ink-600">Kiri Bagasi</span>
-                                </button>
-
-                                <div class="relative seat-choice flex flex-col items-center justify-center p-3.5 rounded-lg bg-gray-300 text-gray-600 cursor-not-allowed">
-                                    <span class="material-symbols-outlined text-2xl opacity-40">airline_seat_recline_normal</span>
-                                    <span class="font-semibold mt-1 opacity-50">Kursi 5</span>
-                                    <span class="text-xs opacity-60">Kanan Bagasi</span>
-
-                                    <div class="absolute inset-0 flex items-center justify-center bg-black/5 rounded-lg">
-                                        <span class="bg-gray-600/80 text-white text-[10px] px-2 py-0.5 rounded uppercase">Terisi</span>
+                                @if (in_array(4, $occupiedSeats ?? []))
+                                    <div class="relative seat-choice flex flex-col items-center justify-center p-3.5 rounded-lg bg-gray-300 text-gray-600 cursor-not-allowed">
+                                        <span class="material-symbols-outlined text-2xl opacity-40">airline_seat_recline_normal</span>
+                                        <span class="font-semibold mt-1 opacity-50">Kursi 4</span>
+                                        <span class="text-xs opacity-60">Kiri Bagasi</span>
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black/5 rounded-lg">
+                                            <span class="bg-gray-600/80 text-white text-[10px] px-2 py-0.5 rounded uppercase">Terisi</span>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <button
+                                        type="button"
+                                        class="seat-choice group relative flex flex-col items-center justify-center p-3.5 rounded-lg bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"
+                                        id="seat-btn-4"
+                                        onclick="selectSeat(4, 'Kursi No. 4', 'Baris Belakang - Sisi Kiri')"
+                                    >
+                                        <span class="material-symbols-outlined text-2xl text-ink-600">airline_seat_recline_normal</span>
+                                        <span class="seat-title font-semibold mt-1">Kursi 4</span>
+                                        <span class="seat-sub text-xs text-ink-600">Kiri Bagasi</span>
+                                    </button>
+                                @endif
+
+                                @if (in_array(5, $occupiedSeats ?? []))
+                                    <div class="relative seat-choice flex flex-col items-center justify-center p-3.5 rounded-lg bg-gray-300 text-gray-600 cursor-not-allowed">
+                                        <span class="material-symbols-outlined text-2xl opacity-40">airline_seat_recline_normal</span>
+                                        <span class="font-semibold mt-1 opacity-50">Kursi 5</span>
+                                        <span class="text-xs opacity-60">Kanan Bagasi</span>
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black/5 rounded-lg">
+                                            <span class="bg-gray-600/80 text-white text-[10px] px-2 py-0.5 rounded uppercase">Terisi</span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <button
+                                        type="button"
+                                        class="seat-choice group relative flex flex-col items-center justify-center p-3.5 rounded-lg bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"
+                                        id="seat-btn-5"
+                                        onclick="selectSeat(5, 'Kursi No. 5', 'Baris Belakang - Sisi Kanan')"
+                                    >
+                                        <span class="material-symbols-outlined text-2xl text-ink-600">airline_seat_recline_normal</span>
+                                        <span class="seat-title font-semibold mt-1">Kursi 5</span>
+                                        <span class="seat-sub text-xs text-ink-600">Kanan Bagasi</span>
+                                    </button>
+                                @endif
 
                             </div>
                         </div>
@@ -396,17 +449,23 @@
 
                             <div class="flex items-start justify-between gap-4">
                                 <span class="text-ink-600">Rute Perjalanan</span>
-                                <span class="font-semibold text-right">Rajabasa → Krui (Pesisir Barat)</span>
+                                <span class="font-semibold text-right">
+                                    {{ $schedule->route->origin->name ?? 'Kota Asal' }} → {{ $schedule->route->destination->name ?? 'Kota Tujuan' }}
+                                </span>
                             </div>
 
                             <div class="flex items-start justify-between gap-4">
                                 <span class="text-ink-600">Jadwal Keberangkatan</span>
-                                <span class="font-semibold text-right">24 Okt 2024 • 08:00 WIB</span>
+                                <span class="font-semibold text-right">
+                                    {{ $schedule->departure_at ? $schedule->departure_at->translatedFormat('d M Y • H:i') . ' WIB' : '-' }}
+                                </span>
                             </div>
 
                             <div class="flex items-start justify-between gap-4">
-                                <span class="text-ink-600">Titik Kumpul / Pool</span>
-                                <span class="font-semibold text-right">Loket Pool Rajabasa, Rajabasa</span>
+                                <span class="text-ink-600">Armada Kendaraan</span>
+                                <span class="font-semibold text-right">
+                                    {{ $schedule->vehicle->type ?? 'Mobil Travel' }} ({{ $schedule->vehicle->plate_number ?? '-' }})
+                                </span>
                             </div>
 
                         </div>
@@ -429,19 +488,19 @@
                                     class="font-headline text-xl font-semibold text-forest-900"
                                     id="selected-seat-label"
                                 >
-                                    Kursi No. 3
+                                    Belum Dipilih
                                 </span>
 
                                 <span
                                     class="text-sm text-forest-700 font-medium"
                                     id="selected-seat-pos"
                                 >
-                                    Baris Tengah - Sisi Kanan
+                                    Silakan klik salah satu kursi di denah
                                 </span>
                             </div>
 
                             <p class="text-sm text-ink-600">
-                                Posisi nyaman di belakang baris supir dengan ruang kaki optimal.
+                                Nomor kursi Anda akan dikunci untuk pesanan ini.
                             </p>
                         </div>
 
@@ -454,17 +513,17 @@
 
                             <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
 
-                                <div class="w-8 h-8 rounded-full bg-forest-700 text-white flex items-center justify-center font-bold text-xs">
-                                    BH
+                                <div class="w-8 h-8 rounded-full bg-forest-700 text-white flex items-center justify-center font-bold text-xs uppercase">
+                                    {{ substr(auth()->user()->name ?? 'P', 0, 2) }}
                                 </div>
 
                                 <div class="flex-1 min-w-0">
                                     <span class="font-semibold text-forest-900 block truncate">
-                                        Bambang Hermanto
+                                        {{ auth()->user()->name ?? 'Penumpang' }}
                                     </span>
 
                                     <span class="text-ink-600">
-                                        0812-3456-7890
+                                        {{ auth()->user()->phone ?? auth()->user()->email }}
                                     </span>
                                 </div>
 
@@ -480,8 +539,8 @@
                         <div class="space-y-3 text-sm">
 
                             <div class="flex items-center justify-between">
-                                <span class="text-ink-600">Tarif Tiket Dasar</span>
-                                <span class="font-medium">Rp 120.000</span>
+                                <span class="text-ink-600">Tarif Tiket Resmi</span>
+                                <span class="font-medium">Rp {{ number_format($schedule->price ?? 0, 0, ',', '.') }}</span>
                             </div>
 
                             <div class="flex items-center justify-between">
@@ -492,7 +551,7 @@
                             <div class="flex items-center justify-between pt-2">
                                 <span class="font-semibold text-forest-900">Total Pembayaran</span>
                                 <span class="font-headline text-xl font-bold text-forest-900">
-                                    Rp 120.000
+                                    Rp {{ number_format($schedule->price ?? 0, 0, ',', '.') }}
                                 </span>
                             </div>
 
@@ -502,27 +561,42 @@
                             </p>
                         </div>
 
-                        <!-- TOMBOL AKSI -->
-                        <div class="space-y-3 pt-2">
+                        <!-- FORM SUBMIT BOOKING -->
+                        <form id="bookingForm" method="POST" action="{{ route('member.booking.store') }}" class="space-y-3 pt-2">
+                            @csrf
+                            <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
+                            <input type="hidden" name="seat_number" id="input_seat_number" value="">
+
+                            @if (session('error'))
+                                <div class="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+
+                            @error('seat_number')
+                                <div class="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs">
+                                    {{ $message }}
+                                </div>
+                            @enderror
 
                             <button
-                                type="button"
-                                onclick="continueBooking()"
-                                class="w-full bg-forest-700 hover:bg-forest-900 text-white py-3.5 px-6 rounded-lg font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors"
+                                type="submit"
+                                id="btnSubmitBooking"
+                                disabled
+                                class="w-full bg-forest-700 hover:bg-forest-900 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3.5 px-6 rounded-lg font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
                             >
-                                <span>Lanjut ke Ringkasan Pemesanan</span>
+                                <span>Lanjut ke Pembayaran</span>
                                 <span class="material-symbols-outlined">arrow_forward</span>
                             </button>
 
                             <a
                                 href="{{ route('member.cari-jadwal') }}"
-                                class="w-full bg-white hover:bg-sage-100 text-forest-900 py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
+                                class="w-full bg-white hover:bg-sage-100 text-forest-900 py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-center block"
                             >
-                                <span class="material-symbols-outlined">arrow_back</span>
+                                <span class="material-symbols-outlined text-base">arrow_back</span>
                                 Kembali ke Hasil Jadwal
                             </a>
-
-                        </div>
+                        </form>
                     </div>
 
                     <!-- JAMINAN LAYANAN -->
@@ -713,13 +787,18 @@
 
             // Perbarui ringkasan kursi
             document.getElementById('selected-seat-label').textContent = labelText;
-
             document.getElementById('selected-seat-pos').textContent = posText;
-        }
 
-        // Tombol lanjut ke ringkasan pemesanan
-        function continueBooking() {
-            window.location.href = "{{ route('member.pesanan') }}";
+            // Set nilai ke input form dan aktifkan tombol submit
+            const inputSeat = document.getElementById('input_seat_number');
+            if (inputSeat) {
+                inputSeat.value = seatNumber;
+            }
+
+            const btnSubmit = document.getElementById('btnSubmitBooking');
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+            }
         }
     </script>
 

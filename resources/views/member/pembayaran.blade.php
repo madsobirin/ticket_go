@@ -112,11 +112,11 @@
                 <div class="hidden sm:flex flex-col text-right">
                     <span class="font-body-sm text-body-sm text-ink-600">Halo,</span>
                     <a href="{{ route('member.profil') }}" class="font-title-sm text-title-sm text-forest-900 leading-none hover:text-forest-700 transition-colors">
-                        Bambang Hermanto
+                        {{ auth()->user()->name ?? 'Member' }}
                     </a>
                 </div>
-                <a href="{{ route('member.profil') }}" class="w-9 h-9 rounded-full bg-forest-700 text-paper-0 flex items-center justify-center font-bold text-sm ring-2 ring-forest-700/20 hover:ring-forest-700 transition-all" title="Profil Pelanggan">
-                    BH
+                <a href="{{ route('member.profil') }}" class="w-9 h-9 rounded-full bg-forest-700 text-paper-0 flex items-center justify-center font-bold text-sm ring-2 ring-forest-700/20 hover:ring-forest-700 transition-all uppercase" title="Profil Pelanggan">
+                    {{ substr(auth()->user()->name ?? 'MB', 0, 2) }}
                 </a>
             </div>
         </div>
@@ -374,7 +374,7 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-ink-600">Nama Penumpang</span>
-                                <span class="font-medium text-forest-900">Bambang Hermanto</span>
+                                <span class="font-medium text-forest-900">{{ auth()->user()->name ?? 'Member' }}</span>
                             </div>
                         </div>
 

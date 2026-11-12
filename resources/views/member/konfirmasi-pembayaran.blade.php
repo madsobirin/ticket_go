@@ -112,11 +112,11 @@
                 <div class="hidden sm:flex flex-col text-right">
                     <span class="font-body-sm text-body-sm text-ink-600">Halo,</span>
                     <a href="{{ route('member.profil') }}" class="font-title-sm text-title-sm text-forest-900 leading-none hover:text-forest-700 transition-colors">
-                        Bambang Hermanto
+                        {{ auth()->user()->name ?? 'Member' }}
                     </a>
                 </div>
-                <a href="{{ route('member.profil') }}" class="w-9 h-9 rounded-full bg-forest-700 text-paper-0 flex items-center justify-center font-bold text-sm ring-2 ring-forest-700/20 hover:ring-forest-700 transition-all" title="Profil Pelanggan">
-                    BH
+                <a href="{{ route('member.profil') }}" class="w-9 h-9 rounded-full bg-forest-700 text-paper-0 flex items-center justify-center font-bold text-sm ring-2 ring-forest-700/20 hover:ring-forest-700 transition-all uppercase" title="Profil Pelanggan">
+                    {{ substr(auth()->user()->name ?? 'MB', 0, 2) }}
                 </a>
             </div>
         </div>
@@ -195,7 +195,7 @@
                                 <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="nama_pengirim">
                                     Nama Pemilik Rekening Pengirim <span class="text-red-600">*</span>
                                 </label>
-                                <input id="nama_pengirim" name="nama_pengirim" type="text" value="Bambang Hermanto" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900" placeholder="Nama sesuai rekening bank Anda" required>
+                                <input id="nama_pengirim" name="nama_pengirim" type="text" value="{{ auth()->user()->name ?? '' }}" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900" placeholder="Nama sesuai rekening bank Anda" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="no_rek_pengirim">

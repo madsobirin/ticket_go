@@ -287,7 +287,7 @@
                     </span>
 
                     <a href="{{ route('member.profil') }}" class="font-title-sm text-title-sm text-forest-900 leading-none hover:text-forest-700 transition-colors">
-                        {{ auth()->user()->name ?? session('auth_user.name', 'Bambang Hermanto') }}
+                        {{ auth()->user()->name ?? 'Member' }}
                     </a>
                 </div>
 
@@ -505,26 +505,11 @@
                                     <option disabled selected value="">
                                         Pilih Keberangkatan
                                     </option>
-
-                                    <option value="Bandar Lampung">
-                                        Bandar Lampung (Rajabasa)
-                                    </option>
-
-                                    <option value="Kalianda">
-                                        Kalianda (Lampung Selatan)
-                                    </option>
-
-                                    <option value="Kotabumi">
-                                        Kotabumi (Lampung Utara)
-                                    </option>
-
-                                    <option value="Metro">
-                                        Metro (Kota)
-                                    </option>
-
-                                    <option value="Pringsewu">
-                                        Pringsewu
-                                    </option>
+                                    @foreach ($cities ?? [] as $city)
+                                        <option value="{{ $city->name }}">
+                                            {{ $city->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
 
                                 <span class="material-symbols-outlined text-ink-600 pointer-events-none absolute right-3 top-3 text-[20px]">
@@ -569,12 +554,11 @@
                                     <option disabled selected value="">
                                         Pilih Tujuan Akhir
                                     </option>
-
-                                    <option value="Bandar Lampung">Bandar Lampung</option>
-                                    <option value="Metro">Metro</option>
-                                    <option value="Kalianda">Kalianda</option>
-                                    <option value="Kotabumi">Kotabumi</option>
-                                    <option value="Krui Pesisir">Krui (Pesisir Barat)</option>
+                                    @foreach ($cities ?? [] as $city)
+                                        <option value="{{ $city->name }}">
+                                            {{ $city->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
 
                                 <span class="material-symbols-outlined text-ink-600 pointer-events-none absolute right-3 top-3 text-[20px]">
@@ -603,7 +587,8 @@
                                     id="tgl_berangkat"
                                     name="tgl_berangkat"
                                     type="date"
-                                    value="2025-05-18"
+                                    min="{{ date('Y-m-d') }}"
+                                    value="{{ date('Y-m-d') }}"
                                     required
                                 >
                             </div>
