@@ -371,10 +371,10 @@
 
                         <div class="flex flex-col">
                             <span class="font-label-sm text-label-sm text-ink-600 uppercase">
-                                Pencarian Terkini
+                                Tanggal Perjalanan
                             </span>
                             <span class="font-title-sm text-title-sm text-forest-900">
-                                Kamis, 24 Oktober 2024
+                                {{ $departureDate ? \Carbon\Carbon::parse($departureDate)->translatedFormat('l, d F Y') : 'Semua Tanggal' }}
                             </span>
                         </div>
                     </div>
@@ -411,7 +411,7 @@
                                         <div class="flex flex-col">
                                             <span class="font-label-sm text-label-sm text-primary-fixed-dim">Kota Asal</span>
                                             <span id="activeKotaAsal" class="font-title-md text-title-md text-paper-0 font-semibold">
-                                                Bandar Lampung (Rajabasa)
+                                                {{ $originName ?: 'Semua Kota Asal' }}
                                             </span>
                                         </div>
                                     </div>
@@ -426,7 +426,7 @@
                                         <div class="flex flex-col">
                                             <span class="font-label-sm text-label-sm text-primary-fixed-dim">Kota Tujuan</span>
                                             <span id="activeKotaTujuan" class="font-title-md text-title-md text-paper-0 font-semibold">
-                                                Krui (Pesisir Barat)
+                                                {{ $destinationName ?: 'Semua Kota Tujuan' }}
                                             </span>
                                         </div>
                                     </div>
@@ -521,11 +521,6 @@
                                     >
                                 </div>
 
-                                <button type="submit" class="w-full py-2.5 bg-forest-700 hover:bg-forest-900 text-white font-semibold text-sm rounded-lg transition shadow-sm">
-                                    Terapkan Filter
-                                </button>
-                            </form>
-
                                 {{-- WAKTU KEBERANGKATAN --}}
                                 <div class="flex flex-col gap-2 pt-2">
                                     <span class="font-label-lg text-label-lg text-ink-600 font-medium">
@@ -536,7 +531,20 @@
 
                                         <label class="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-sage-100/60 cursor-pointer transition-colors group">
                                             <div class="flex items-center gap-3">
-                                                <input checked class="w-4 h-4 rounded text-forest-700 accent-forest-700 cursor-pointer" name="waktu" type="checkbox" value="pagi">
+                                                <input class="w-4 h-4 rounded text-forest-700 accent-forest-700 cursor-pointer" name="waktu" type="radio" value="" {{ empty($timeFilter) ? 'checked' : '' }}>
+
+                                                <div class="flex flex-col">
+                                                    <span class="font-body-md text-body-md text-ink-900 font-medium">Semua Waktu</span>
+                                                    <span class="font-body-sm text-body-sm text-ink-600">24 Jam</span>
+                                                </div>
+                                            </div>
+
+                                            <span class="material-symbols-outlined text-ink-600 text-[18px]">schedule</span>
+                                        </label>
+
+                                        <label class="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-sage-100/60 cursor-pointer transition-colors group">
+                                            <div class="flex items-center gap-3">
+                                                <input class="w-4 h-4 rounded text-forest-700 accent-forest-700 cursor-pointer" name="waktu" type="radio" value="pagi" {{ ($timeFilter ?? '') === 'pagi' ? 'checked' : '' }}>
 
                                                 <div class="flex flex-col">
                                                     <span class="font-body-md text-body-md text-ink-900 font-medium">Pagi Hari</span>
@@ -549,7 +557,7 @@
 
                                         <label class="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-sage-100/60 cursor-pointer transition-colors group">
                                             <div class="flex items-center gap-3">
-                                                <input checked class="w-4 h-4 rounded text-forest-700 accent-forest-700 cursor-pointer" name="waktu" type="checkbox" value="siang">
+                                                <input class="w-4 h-4 rounded text-forest-700 accent-forest-700 cursor-pointer" name="waktu" type="radio" value="siang" {{ ($timeFilter ?? '') === 'siang' ? 'checked' : '' }}>
 
                                                 <div class="flex flex-col">
                                                     <span class="font-body-md text-body-md text-ink-900 font-medium">Siang Hari</span>
@@ -562,7 +570,7 @@
 
                                         <label class="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-sage-100/60 cursor-pointer transition-colors group">
                                             <div class="flex items-center gap-3">
-                                                <input checked class="w-4 h-4 rounded text-forest-700 accent-forest-700 cursor-pointer" name="waktu" type="checkbox" value="sore-malam">
+                                                <input class="w-4 h-4 rounded text-forest-700 accent-forest-700 cursor-pointer" name="waktu" type="radio" value="sore-malam" {{ ($timeFilter ?? '') === 'sore-malam' ? 'checked' : '' }}>
 
                                                 <div class="flex flex-col">
                                                     <span class="font-body-md text-body-md text-ink-900 font-medium">Sore &amp; Malam</span>
@@ -576,7 +584,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="w-full mt-2 py-3 px-4 bg-forest-700 hover:bg-forest-900 text-on-primary font-label-lg text-label-lg rounded-lg font-medium transition-all shadow-sm flex items-center justify-center gap-2">
+                                <button type="submit" class="w-full mt-2 py-3 px-4 bg-forest-700 hover:bg-forest-900 text-white font-label-lg text-label-lg rounded-lg font-medium transition-all shadow-sm flex items-center justify-center gap-2">
                                     <span class="material-symbols-outlined text-[18px]">search</span>
                                     Terapkan Filter
                                 </button>
@@ -609,7 +617,7 @@
 
                                 <span class="font-body-md text-body-md text-ink-900 font-medium">
                                     Menampilkan
-                                    <span id="scheduleCount" class="font-bold text-forest-900">4 jadwal resmi</span>
+                                    <span id="scheduleCount" class="font-bold text-forest-900">{{ $schedules->total() }} jadwal resmi</span>
                                     yang tersedia untuk rute terpilih
                                 </span>
                             </div>
@@ -903,90 +911,16 @@
     {{-- JAVASCRIPT FILTER --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-
-            const filterForm = document.getElementById('filterForm');
             const btnReset = document.getElementById('btnResetFilter');
 
-            const selectKotaAsal = document.getElementById('filterKotaAsal');
-            const selectKotaTujuan = document.getElementById('filterKotaTujuan');
-
-            const activeKotaAsal = document.getElementById('activeKotaAsal');
-            const activeKotaTujuan = document.getElementById('activeKotaTujuan');
-
-            const scheduleCards = document.querySelectorAll('.schedule-card');
-            const scheduleCount = document.getElementById('scheduleCount');
-            const emptySchedule = document.getElementById('emptySchedule');
-
-            // Fungsi untuk memperbarui jumlah jadwal
-            function updateScheduleCount() {
-                const visibleCards = Array.from(scheduleCards).filter(card => {
-                    return card.style.display !== 'none';
+            // Tombol reset filter mengarahkan ulang ke halaman tanpa query filter
+            if (btnReset) {
+                btnReset.addEventListener('click', function () {
+                    window.location.href = "{{ route('member.cari-jadwal') }}";
                 });
-
-                scheduleCount.textContent = visibleCards.length + ' jadwal resmi';
-
-                if (visibleCards.length === 0) {
-                    emptySchedule.classList.remove('hidden');
-                } else {
-                    emptySchedule.classList.add('hidden');
-                }
             }
-
-            // Terapkan filter
-            filterForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                // Perbarui informasi rute
-                activeKotaAsal.textContent =
-                    selectKotaAsal.options[selectKotaAsal.selectedIndex].text;
-
-                activeKotaTujuan.textContent =
-                    selectKotaTujuan.options[selectKotaTujuan.selectedIndex].text;
-
-                // Ambil waktu yang dipilih
-                const selectedWaktu = Array.from(
-                    filterForm.querySelectorAll('input[name="waktu"]:checked')
-                ).map(checkbox => checkbox.value);
-
-                // Filter kartu berdasarkan waktu
-                scheduleCards.forEach(card => {
-                    const cardWaktu = card.dataset.waktu;
-
-                    if (
-                        selectedWaktu.length === 0 ||
-                        selectedWaktu.includes(cardWaktu)
-                    ) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-
-                updateScheduleCount();
-            });
-
-            // Tombol reset filter
-            btnReset.addEventListener('click', function () {
-
-                selectKotaAsal.value = 'Bandar Lampung';
-                selectKotaTujuan.value = 'Krui';
-
-                filterForm.querySelectorAll('input[name="waktu"]').forEach(checkbox => {
-                    checkbox.checked = true;
-                });
-
-                scheduleCards.forEach(card => {
-                    card.style.display = 'flex';
-                });
-
-                activeKotaAsal.textContent = 'Bandar Lampung (Rajabasa)';
-                activeKotaTujuan.textContent = 'Krui (Pesisir Barat)';
-
-                updateScheduleCount();
-            });
-
-            // Hitung jadwal saat halaman pertama kali dibuka
-            updateScheduleCount();
+        });
+    </script>
 
         });
     </script>

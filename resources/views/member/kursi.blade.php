@@ -700,12 +700,13 @@
 
     <!-- JAVASCRIPT PILIH KURSI -->
     <script>
-        let selectedSeat = 3;
+        let selectedSeat = null;
 
-        const availableSeats = [1, 3, 4];
+        const occupiedSeats = @json($occupiedSeats ?? []);
+        const allSeats = [1, 2, 3, 4, 5];
+        const availableSeats = allSeats.filter(s => !occupiedSeats.includes(s));
 
         function selectSeat(seatNumber, labelText, posText) {
-
             if (!availableSeats.includes(seatNumber)) {
                 return;
             }

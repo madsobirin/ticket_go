@@ -204,7 +204,7 @@
                         <!-- BANK TRANSFER CARDS -->
                         <div class="space-y-4">
                             <!-- BANK MANDIRI -->
-                            <div class="border-2 border-forest-700/60 rounded-xl p-5 bg-surface-container-low/50 hover:bg-surface-container-low transition-colors">
+                            <div id="cardMandiri" onclick="pilihMetodeBank('Mandiri')" class="bank-card border-2 border-forest-700 rounded-xl p-5 bg-surface-container-low cursor-pointer transition-all">
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-surface-container">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-8 rounded bg-blue-900 text-white font-bold text-xs flex items-center justify-center tracking-wider">
@@ -215,14 +215,14 @@
                                             <span class="text-xs text-ink-600 block">Transfer Antar-Bank / Sesama Mandiri</span>
                                         </div>
                                     </div>
-                                    <span class="text-xs bg-forest-700/10 text-forest-900 font-semibold px-2.5 py-1 rounded-md self-start sm:self-auto">Verifikasi Tercepat</span>
+                                    <span id="badgeMandiri" class="text-xs bg-forest-700 text-white font-semibold px-2.5 py-1 rounded-md self-start sm:self-auto">Dipilih</span>
                                 </div>
                                 <div class="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                     <div>
                                         <span class="text-xs text-ink-600 block">Nomor Rekening Resmi:</span>
                                         <div class="flex items-center gap-3 mt-1">
                                             <span id="mandiriRek" class="font-mono text-xl sm:text-2xl font-bold text-forest-900 tracking-wider">1140029182341</span>
-                                            <button onclick="copyToClipboard('1140029182341', 'Mandiri')" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-lg bg-forest-700 text-white hover:bg-forest-900 transition-colors shadow-xs">
+                                            <button type="button" onclick="event.stopPropagation(); copyToClipboard('1140029182341', 'Mandiri')" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-lg bg-forest-700 text-white hover:bg-forest-900 transition-colors shadow-xs">
                                                 <span class="material-symbols-outlined text-[14px]">content_copy</span>
                                                 Salin
                                             </button>
@@ -233,7 +233,7 @@
                             </div>
 
                             <!-- BANK BRI -->
-                            <div class="border border-surface-container rounded-xl p-5 hover:border-forest-700/40 bg-paper-0 transition-colors">
+                            <div id="cardBri" onclick="pilihMetodeBank('BRI')" class="bank-card border border-surface-container rounded-xl p-5 hover:border-forest-700/60 bg-paper-0 cursor-pointer transition-all">
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-surface-container">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-8 rounded bg-blue-600 text-white font-bold text-xs flex items-center justify-center tracking-wider">
@@ -244,13 +244,14 @@
                                             <span class="text-xs text-ink-600 block">Transfer Rekening Operasional Loket</span>
                                         </div>
                                     </div>
+                                    <span id="badgeBri" class="hidden text-xs bg-forest-700 text-white font-semibold px-2.5 py-1 rounded-md self-start sm:self-auto">Dipilih</span>
                                 </div>
                                 <div class="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                     <div>
                                         <span class="text-xs text-ink-600 block">Nomor Rekening Resmi:</span>
                                         <div class="flex items-center gap-3 mt-1">
                                             <span id="briRek" class="font-mono text-xl sm:text-2xl font-bold text-forest-900 tracking-wider">009801002345531</span>
-                                            <button onclick="copyToClipboard('009801002345531', 'BRI')" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-lg bg-surface-container hover:bg-forest-700 hover:text-white transition-colors">
+                                            <button type="button" onclick="event.stopPropagation(); copyToClipboard('009801002345531', 'BRI')" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-lg bg-surface-container hover:bg-forest-700 hover:text-white transition-colors">
                                                 <span class="material-symbols-outlined text-[14px]">content_copy</span>
                                                 Salin
                                             </button>
@@ -261,7 +262,7 @@
                             </div>
 
                             <!-- BANK BCA -->
-                            <div class="border border-surface-container rounded-xl p-5 hover:border-forest-700/40 bg-paper-0 transition-colors">
+                            <div id="cardBca" onclick="pilihMetodeBank('BCA')" class="bank-card border border-surface-container rounded-xl p-5 hover:border-forest-700/60 bg-paper-0 cursor-pointer transition-all">
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-surface-container">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-8 rounded bg-blue-700 text-white font-bold text-xs flex items-center justify-center tracking-wider">
@@ -272,13 +273,14 @@
                                             <span class="text-xs text-ink-600 block">Transfer Antar-Bank / BCA Mobile</span>
                                         </div>
                                     </div>
+                                    <span id="badgeBca" class="hidden text-xs bg-forest-700 text-white font-semibold px-2.5 py-1 rounded-md self-start sm:self-auto">Dipilih</span>
                                 </div>
                                 <div class="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                     <div>
                                         <span class="text-xs text-ink-600 block">Nomor Rekening Resmi:</span>
                                         <div class="flex items-center gap-3 mt-1">
                                             <span id="bcaRek" class="font-mono text-xl sm:text-2xl font-bold text-forest-900 tracking-wider">8270918821</span>
-                                            <button onclick="copyToClipboard('8270918821', 'BCA')" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-lg bg-surface-container hover:bg-forest-700 hover:text-white transition-colors">
+                                            <button type="button" onclick="event.stopPropagation(); copyToClipboard('8270918821', 'BCA')" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-lg bg-surface-container hover:bg-forest-700 hover:text-white transition-colors">
                                                 <span class="material-symbols-outlined text-[14px]">content_copy</span>
                                                 Salin
                                             </button>
@@ -351,41 +353,47 @@
                     <div class="bg-paper-0 rounded-2xl p-6 shadow-sm border border-surface-container space-y-5">
                         <div class="flex items-center justify-between pb-3 border-b border-surface-container">
                             <h2 class="font-title-md text-base font-bold text-forest-900">Ringkasan Tagihan</h2>
-                            <span class="font-mono text-xs font-bold bg-surface-container px-2 py-0.5 rounded text-forest-900">#PSN-202410-098</span>
+                            <span class="font-mono text-xs font-bold bg-surface-container px-2 py-0.5 rounded text-forest-900">
+                                #PSN-{{ str_pad($pesan->id_pesan ?? 1, 4, '0', STR_PAD_LEFT) }}
+                            </span>
                         </div>
 
                         <!-- DATA PERJALANAN -->
                         <div class="space-y-3 text-sm">
                             <div class="flex justify-between items-start">
                                 <span class="text-ink-600">Rute Perjalanan</span>
-                                <span class="font-semibold text-forest-900 text-right">Bandar Lampung → Krui</span>
+                                <span class="font-semibold text-forest-900 text-right">
+                                    {{ $pesan->jadwal->kotaAsal->nm_kota_asal ?? 'Bandar Lampung' }} → {{ $pesan->jadwal->kotaTujuan->nm_kota_tujuan ?? 'Krui' }}
+                                </span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-ink-600">Jadwal Trip</span>
-                                <span class="font-medium text-forest-900">Senin, 10 Nov • 08:00</span>
+                                <span class="font-medium text-forest-900">
+                                    {{ $pesan?->jadwal?->tgl_berangkat ? \Carbon\Carbon::parse($pesan->jadwal->tgl_berangkat)->translatedFormat('l, d M') : 'Senin, 10 Nov' }} • {{ substr($pesan->jadwal->jam_berangkat ?? '08:00', 0, 5) }}
+                                </span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-ink-600">Nomor Kursi</span>
-                                <span class="font-bold text-forest-700 bg-secondary-container px-2 py-0.5 rounded text-xs">Kursi 3 (Jendela)</span>
+                                <span class="font-bold text-forest-700 bg-secondary-container px-2 py-0.5 rounded text-xs">
+                                    Kursi {{ $pesan->nomor_kursi ?? 1 }}
+                                </span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-ink-600">Armada</span>
-                                <span class="font-medium text-forest-900">Toyota HiAce BE 7012 AA</span>
+                                <span class="font-medium text-forest-900">
+                                    {{ $pesan->jadwal->kendaraan->jenis_mobil ?? 'Toyota HiAce' }} {{ $pesan->jadwal->kendaraan->nomor_polisi ?? 'BE 7012 AA' }}
+                                </span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-ink-600">Nama Penumpang</span>
-                                <span class="font-medium text-forest-900">{{ auth()->user()->name ?? 'Member' }}</span>
+                                <span class="font-medium text-forest-900">{{ auth()->user()->nama ?? auth()->user()->name ?? 'Member' }}</span>
                             </div>
                         </div>
 
                         <div class="border-t border-surface-container pt-3 space-y-2 text-sm">
                             <div class="flex justify-between text-ink-600">
                                 <span>Tarif Tiket</span>
-                                <span>Rp 120.000</span>
-                            </div>
-                            <div class="flex justify-between text-ink-600">
-                                <span>Kode Unik Verifikasi</span>
-                                <span class="text-amber-500 font-mono font-bold">+ Rp 354</span>
+                                <span>Rp {{ number_format($pesan->jadwal->harga ?? 120000, 0, ',', '.') }}</span>
                             </div>
                             <div class="flex justify-between text-ink-600">
                                 <span>Biaya Layanan Loket</span>
@@ -398,10 +406,12 @@
                             <div class="flex items-baseline justify-between mb-4">
                                 <div>
                                     <span class="text-xs font-bold text-forest-900 uppercase tracking-wider block">Total Transfer</span>
-                                    <span class="text-[11px] text-ink-600">Wajib transfer pas hingga digit terakhir</span>
+                                    <span class="text-[11px] text-ink-600">Wajib transfer pas sesuai nominal</span>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-2xl font-bold font-mono text-forest-900">Rp 120.354</span>
+                                    <span class="text-2xl font-bold font-mono text-forest-900">
+                                        Rp {{ number_format($pesan->jadwal->harga ?? 120000, 0, ',', '.') }}
+                                    </span>
                                 </div>
                             </div>
 
@@ -487,6 +497,25 @@
                     toast.classList.add('hidden');
                 }, 3000);
             }
+        }
+
+        // Interaksi pemilihan kartu bank
+        function pilihMetodeBank(bank) {
+            const banks = ['Mandiri', 'Bri', 'Bca'];
+            banks.forEach(b => {
+                const card = document.getElementById('card' + b);
+                const badge = document.getElementById('badge' + b);
+                if (card && badge) {
+                    if (b.toLowerCase() === bank.toLowerCase()) {
+                        card.className = "bank-card border-2 border-forest-700 rounded-xl p-5 bg-surface-container-low cursor-pointer transition-all";
+                        badge.classList.remove('hidden');
+                    } else {
+                        card.className = "bank-card border border-surface-container rounded-xl p-5 hover:border-forest-700/60 bg-paper-0 cursor-pointer transition-all";
+                        badge.classList.add('hidden');
+                    }
+                }
+            });
+            showToast(`Metode pembayaran Bank ${bank} dipilih`);
         }
     </script>
 
