@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Operator;
 
-use App\Enums\PaymentStatus;
-use App\Enums\ScheduleStatus;
 use App\Http\Controllers\Controller;
-use App\Models\Booking;
-use App\Models\Payment;
-use App\Models\Schedule;
+use App\Models\Jadwal;
+use App\Models\KonfirmasiPesan;
+use App\Models\Pesan;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -18,16 +16,23 @@ class DashboardController extends Controller
      */
     public function index(Request $request): View
     {
-        $todaySchedulesCount = Schedule::whereDate('departure_at', today())
-            ->where('status', ScheduleStatus::Open)
-            ->count();
+        $todaySchedulesCount = Jadwal::count();
 
-        $pendingPaymentsCount = Payment::where('status', PaymentStatus::Pending)->count();
+        $pendingPaymentsCount = KonfirmasiPesan::whereHas('pesan', function ($q) {
+            $q->where('status', 'Menunggu Konfirmasi');
+        })->count();
 
-        $todayBookingsCount = Booking::whereDate('created_at', today())->count();
+        $todayBookingsCount = Pesan::count();
 
-        $recentPayments = Payment::with(['booking.user', 'booking.schedule.route.origin', 'booking.schedule.route.destination'])
-            ->latest()
+        $recentPayments = KonfirmasiPesan::with([
+            'pesan.member',
+            'pesan.jadwal.kotaAsal',
+            'pesan.jadwal.kotaTujuan',
+        ])
+            ->whereHas('pesan', function ($q) {
+                $q->where('status', 'Menunggu Konfirmasi');
+            })
+            ->latest('tgl_transfer')
             ->take(6)
             ->get();
 

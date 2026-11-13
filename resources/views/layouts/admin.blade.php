@@ -20,12 +20,45 @@
                     <span class="material-symbols-outlined text-xl">dashboard</span>
                     <span>Dasbor Admin</span>
                 </a>
+
+                <div class="pt-3 pb-1 px-3 text-[11px] font-semibold text-sage-100/60 uppercase tracking-wider">
+                    Menu Admin
+                </div>
+
+                <a href="{{ route('admin.pelanggan') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('admin.pelanggan') ? 'bg-forest-700 text-white' : 'text-sage-100 hover:bg-forest-700/50' }}">
+                    <span class="material-symbols-outlined text-xl">group</span>
+                    <span>Pelanggan</span>
+                </a>
+
+                <a href="{{ route('admin.keluhan') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('admin.keluhan') ? 'bg-forest-700 text-white' : 'text-sage-100 hover:bg-forest-700/50' }}">
+                    <span class="material-symbols-outlined text-xl">report_problem</span>
+                    <span>Keluhan</span>
+                </a>
             @endif
 
             @if (auth()->user()->isOperator() || auth()->user()->isAdmin())
                 <a href="{{ route('operator.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('operator.dashboard') ? 'bg-forest-700 text-white' : 'text-sage-100 hover:bg-forest-700/50' }}">
                     <span class="material-symbols-outlined text-xl">confirmation_number</span>
                     <span>Dasbor Loket</span>
+                </a>
+
+                <div class="pt-3 pb-1 px-3 text-[11px] font-semibold text-sage-100/60 uppercase tracking-wider">
+                    Operasional
+                </div>
+
+                <a href="{{ route('operator.konfirmasi-pembayaran') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('operator.konfirmasi-pembayaran*') ? 'bg-forest-700 text-white' : 'text-sage-100 hover:bg-forest-700/50' }}">
+                    <span class="material-symbols-outlined text-xl">payments</span>
+                    <span>Periksa Bayar</span>
+                </a>
+
+                <a href="{{ route('operator.pesanan') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('operator.pesanan') ? 'bg-forest-700 text-white' : 'text-sage-100 hover:bg-forest-700/50' }}">
+                    <span class="material-symbols-outlined text-xl">receipt_long</span>
+                    <span>Kelola Pesanan</span>
+                </a>
+
+                <a href="{{ route('operator.layani-pemesanan') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('operator.layani-pemesanan') ? 'bg-forest-700 text-white' : 'text-sage-100 hover:bg-forest-700/50' }}">
+                    <span class="material-symbols-outlined text-xl">support_agent</span>
+                    <span>Layani Pemesanan</span>
                 </a>
 
                 <div class="pt-3 pb-1 px-3 text-[11px] font-semibold text-sage-100/60 uppercase tracking-wider">
@@ -59,7 +92,7 @@
                 <div class="truncate">
                     <p class="text-sm font-medium text-white truncate">{{ auth()->user()->name }}</p>
                     <span class="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider {{ auth()->user()->isAdmin() ? 'bg-amber-500 text-forest-900' : 'bg-forest-700 text-sage-100' }}">
-                        {{ auth()->user()->role->label() }}
+                        {{ auth()->user()->isAdmin() ? 'Super Admin' : (auth()->user()->isOperator() ? 'Operator Loket' : 'Member') }}
                     </span>
                 </div>
             </div>

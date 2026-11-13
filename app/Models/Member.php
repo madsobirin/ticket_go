@@ -59,6 +59,21 @@ class Member extends Authenticatable
         return 'member';
     }
 
+    public function isAdmin(): bool
+    {
+        return false;
+    }
+
+    public function isOperator(): bool
+    {
+        return false;
+    }
+
+    public function getAuthIdentifier()
+    {
+        return 'member:'.$this->getKey();
+    }
+
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'id_member', 'id_member');

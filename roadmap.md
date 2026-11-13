@@ -18,6 +18,8 @@ Dokumen panduan tahapan pengembangan sistem tiket travel antar kota Provinsi Lam
 > 6. Pembayaran & Konfirmasi transfer (`member.pembayaran` & `member.konfirmasi-pembayaran`) terhubung ke tabel `konfirmasi_pesan` dan mengubah status tiket menjadi 'Menunggu Konfirmasi'.
 > 7. Verifikasi Pembayaran Loket (`operator.konfirmasi-pembayaran`): Petugas loket dapat memeriksa antrean, menyetujui (status tiket menjadi 'Lunas'), atau menolak pembayaran (status kembali 'Menunggu Pembayaran').
 > 8. Bugfix form konfirmasi & redirect: mapping `no_rek` form field dan link balik `member.cari-jadwal` di `/member/pesanan` normal tanpa error (20/20 test pest lulus).
+> 9. E-Tiket & Riwayat Pesanan Member (`member.pesanan` & `member.tiket`): Riwayat pesanan dinamis dengan tab status ('Semua', 'Menunggu Pembayaran', 'Menunggu Verifikasi', 'Lunas'), kartu tiket interaktif, dan lembar e-tiket resmi sah siap cetak (25/25 test pest lulus).
+> 10. Multi-Actor Auth & Adaptasi Panel Operator Loket: Multi-actor auth provider untuk `operator_loket` & `admin`. Semua menu sidebar operator (Dasbor Loket, Periksa Bayar, Kelola Pesanan, Layani Pemesanan, Kota, Rute Antar Kota, Armada Kendaraan, Jadwal Keberangkatan) 100% siap digunakan dan terhubung langsung ke tabel aktif (`operator_loket`, `kendaraan`, `kota_asal`, `kota_tujuan`, `jadwal`) dengan test 30/30 lulus.
 
 ---
 
@@ -31,9 +33,9 @@ Dokumen panduan tahapan pengembangan sistem tiket travel antar kota Provinsi Lam
 | **Fase 3** | Pencarian & Pemesanan Kursi | **SELESAI** | Pencarian jadwal dinamis, visual 5 kursi, validasi kapasitas, simpan ke tabel `pesan` |
 | **Fase 4** | Pembayaran & Konfirmasi Transfer | **SELESAI** | Ringkasan tagihan tiket, form konfirmasi simpan ke `konfirmasi_pesan`, alur kirim bukti sukses |
 | **Fase 5** | Verifikasi Pembayaran Loket | **SELESAI** | Operator verifikasi bukti bayar, setujui ('Lunas') atau tolak ('Menunggu Pembayaran'), test pest 20/20 lulus |
-| **Fase 6** | E-Tiket & Riwayat Perjalanan | **BERIKUTNYA** | Halaman riwayat tiket member dinamis (`pesanan.blade.php`), cetak / pratinjau e-tiket sah |
-| **Fase 7** | Layanan Keluhan Member | *Menunggu* | Form komplain penumpang ke tabel `keluhan`, panel tindak lanjut operator/admin |
-| **Fase 8** | Adaptasi Operator & Admin Loket | *Menunggu* | Login terpisah / multi-auth (`operator_loket`, `admin`), CRUD master data jadwal |
+| **Fase 6** | E-Tiket & Riwayat Perjalanan | **SELESAI** | Riwayat tiket member dinamis (`pesanan.blade.php`), pratinjau & cetak e-tiket resmi (`tiket.blade.php`), 25/25 test lulus |
+| **Fase 7** | Layanan Keluhan Member | **BERIKUTNYA** | Form komplain penumpang ke tabel `keluhan`, panel tindak lanjut operator/admin |
+| **Fase 8** | Adaptasi Panel Operator & Master Data | **SELESAI** | Multi-auth operator & admin, 8 menu sidebar, CRUD Armada Kendaraan, Kota, Rute, & Jadwal |
 | **Fase 9** | Perbaikan Suite Testing Pest | *Menunggu* | Refactor 71 unit/feature test agar selaras dengan skema tabel database baru |
 
 ---
@@ -46,8 +48,8 @@ flowchart TD
     B --> C["Fase 3: Cari Jadwal & Pilih Kursi (Selesai)"]
     C --> D["Fase 4: Pembayaran & Konfirmasi Transfer (Selesai)"]
     D --> E["Fase 5: Meja Verifikasi Operator Loket (Selesai)"]
-    E --> F["Fase 6: E-Tiket Sah & Riwayat Pesanan (BERIKUTNYA)"]
-    F --> G["Fase 7: Layanan Aduan / Keluhan"]
+    E --> F["Fase 6: E-Tiket Sah & Riwayat Pesanan (Selesai)"]
+    F --> G["Fase 7: Layanan Aduan / Keluhan (BERIKUTNYA)"]
     G --> H["Fase 8: Panel Operator & Admin"]
     H --> I["Fase 9: Refactor Test Pest & Final Polish"]
 ```
@@ -56,22 +58,21 @@ flowchart TD
 
 ## Detail Rencana Eksekusi Mendatang
 
-### Fase 5 — Verifikasi Pembayaran Oleh Operator Loket (Selesai)
-Tujuan: Petugas loket memverifikasi keabsahan dana transfer.
-- [x] **Tugas 5.1: Daftar Antrean Konfirmasi (`operator.konfirmasi-pembayaran`)**: render data dari `konfirmasi_pesan` + relasi ke `pesan`.
-- [x] **Tugas 5.2: Aksi Persetujuan / Penolakan**: tombol setujui ubah status tiket jadi 'Lunas', tolak ubah jadi 'Menunggu Pembayaran' & hapus konfirmasi.
+### Fase 6 — E-Tiket & Riwayat Pesanan Member (Selesai)
+Tujuan: Penumpang memiliki bukti sah tiket perjalanan antar kota di Lampung setelah pembayaran disetujui loket.
+- [x] **Tugas 6.1: Riwayat Pemesanan Dinamis (`member.pesanan`)**: `OrderHistoryController@index` memuat pesanan member dengan filter tab status (`all`, `menunggu-pembayaran`, `menunggu-konfirmasi`, `lunas`).
+- [x] **Tugas 6.2: Modal Pratinjau & Cetak E-Tiket (`member.tiket`)**: Halaman e-tiket resmi lengkap dengan barcode, nomor tiket, rute, armada, kursi, harga, dan fungsi cetak browser (`window.print()`).
 
 ---
 
-### Fase 6 — E-Tiket & Riwayat Pesanan Member (Fokus Sekarang)
-Tujuan: Penumpang memiliki bukti sah tiket perjalanan antar kota di Lampung setelah pembayaran disetujui loket.
+### Fase 7 — Layanan Keluhan Penumpang (Fokus Berikutnya)
+Tujuan: Penumpang dapat menyampaikan aduan terkait perjalanan travel ke tabel `keluhan`.
 
-- **Tugas 6.1: Riwayat Pemesanan Dinamis (`member.pesanan`)**
-  - Buat `OrderHistoryController` untuk mengambil pemesanan milik member yang login (`where('id_member', $member->id_member)`).
-  - Kelompokkan tab: Semua, Menunggu Pembayaran, Menunggu Konfirmasi, Lunas / Selesai.
-- **Tugas 6.2: Modal Pratinjau & Cetak E-Tiket**
-  - Render e-tiket sah (No Pesan, Nama Penumpang, Rute Asal-Tujuan, Waktu Keberangkatan, No Kursi, Armada).
-  - Sediakan tombol Cetak Tiket (`window.print()`).
+- **Tugas 7.1: Form Pengajuan Keluhan (`member.keluhan`)**
+  - Input: Jenis keluhan (`j_keluhan`), Detail keluhan (`d_keluhan`).
+  - Simpan ke tabel `keluhan` berelasi dengan `id_member` login.
+- **Tugas 7.2: Riwayat Keluhan Member**
+  - Tampilkan daftar aduan yang pernah dikirim member beserta status tindak lanjutnya.
 
 ---
 
@@ -86,13 +87,19 @@ Tujuan: Penumpang dapat menyampaikan aduan terkait perjalanan.
 
 ---
 
-### Fase 8 — Adaptasi Panel Operator & Admin
-Tujuan: Loket dan admin dapat mengelola jadwal serta memantau operasional.
+### Fase 8 — Adaptasi Panel Operator & Master Data (Selesai)
+Tujuan: Petugas loket dapat mengelola seluruh operasional loket dan master data travel tanpa kendala.
 
-- **Tugas 8.1: Multi-Auth Guard Loket & Admin**
-  - Autentikasi untuk tabel `operator_loket` dan `admin`.
-- **Tugas 8.2: Manajemen Jadwal & Armada**
-  - Form tambah/ubah jadwal keberangkatan travel baru ke tabel `jadwal`.
+- [x] **Tugas 8.1: Multi-Auth Guard Loket & Admin**
+  - Autentikasi multi-actor untuk tabel `operator_loket` (`operator` / `password123`) dan `admin` (`admin@lintaslampung.com` / `password123`).
+- [x] **Tugas 8.2: Navigasi Sidebar Operator Lengkap**
+  - 8 menu sidebar aktif: Dasbor Loket, Periksa Bayar, Kelola Pesanan, Layani Pemesanan, Kota, Rute Antar Kota, Armada Kendaraan, Jadwal Keberangkatan.
+- [x] **Tugas 8.3: Master Data CRUD Terhubung Skema Database**
+  - Armada Kendaraan: CRUD ke tabel `kendaraan` (aksesor tipe, plat nomor, warna, kapasitas 5 kursi).
+  - Kota Asal & Tujuan: CRUD ke tabel `kota_asal` & `kota_tujuan`.
+  - Rute Antar Kota: kelola relasi asal-tujuan dan tarif dasar.
+  - Jadwal Keberangkatan: CRUD jadwal ke tabel `jadwal` (tanggal, jam, armada, harga, relasi kursi).
+  - Feature test `tests/Feature/Operator/OperatorNavigationTest.php` 100% hijau.
 
 ---
 

@@ -13,7 +13,7 @@
     </div>
 
     <div class="bg-white p-6 sm:p-8 rounded-xl border border-surface-container shadow-sm">
-        <form method="POST" action="{{ route('operator.cities.update', $city) }}" class="space-y-5">
+        <form method="POST" action="{{ route('operator.cities.update', $city->id ?? $city) }}" class="space-y-5">
             @csrf
             @method('PUT')
             <div class="space-y-1.5">

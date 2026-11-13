@@ -67,20 +67,21 @@
                         @foreach ($recentPayments as $payment)
                             <tr class="hover:bg-surface-container-low/40">
                                 <td class="px-6 py-4 font-mono font-bold text-forest-700">
-                                    {{ $payment->booking->code }}
+                                    #PSN-{{ str_pad($payment->id_pesan, 4, '0', STR_PAD_LEFT) }}
                                 </td>
                                 <td class="px-6 py-4 font-medium text-ink-900">
-                                    {{ $payment->booking->user->name }}
+                                    {{ $payment->pesan?->member?->nama ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4 text-xs text-ink-600">
-                                    {{ $payment->booking->schedule->route->origin->name }} &rarr; {{ $payment->booking->schedule->route->destination->name }}
+                                    {{ $payment->pesan?->jadwal?->kotaAsal?->nm_kota_asal }} &rarr; {{ $payment->pesan?->jadwal?->kotaTujuan?->nm_kota_tujuan }}
                                 </td>
-                                <td class="px-6 py-4 font-mono text-xs">
-                                    {{ $payment->receipt_no }}
+                                <td class="px-6 py-4 font-mono text-xs font-bold text-forest-900">
+                                    {{ $payment->no_resi }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="px-2 py-0.5 rounded text-xs font-semibold {{ $payment->status->value === 'approved' ? 'bg-green-100 text-green-800' : ($payment->status->value === 'pending' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800') }}">
-                                        {{ $payment->status->label() }}
+                                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 flex items-center gap-1 w-max">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                        {{ $payment->pesan?->status ?? 'Menunggu Konfirmasi' }}
                                     </span>
                                 </td>
                             </tr>

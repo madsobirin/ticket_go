@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Operator;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class RouteRequest extends FormRequest
 {
@@ -14,24 +13,16 @@ class RouteRequest extends FormRequest
 
     public function rules(): array
     {
-        $routeId = $this->route('route')?->id;
-        $originCityId = $this->input('origin_city_id');
-
         return [
             'origin_city_id' => [
                 'required',
                 'integer',
-                'exists:cities,id',
-                'different:destination_city_id',
+                'exists:kota_asal,id_kota_asal',
             ],
             'destination_city_id' => [
                 'required',
                 'integer',
-                'exists:cities,id',
-                'different:origin_city_id',
-                Rule::unique('routes', 'destination_city_id')
-                    ->where(fn ($query) => $query->where('origin_city_id', $originCityId))
-                    ->ignore($routeId),
+                'exists:kota_tujuan,id_kota_tujuan',
             ],
             'base_price' => [
                 'required',

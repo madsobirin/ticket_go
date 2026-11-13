@@ -38,7 +38,15 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('member.dashboard'));
+        $role = $request->user()?->role;
+
+        $targetUrl = match ($role) {
+            'admin' => route('admin.dashboard'),
+            'operator' => route('operator.dashboard'),
+            default => route('member.dashboard'),
+        };
+
+        return redirect()->intended($targetUrl);
     }
 
     /**

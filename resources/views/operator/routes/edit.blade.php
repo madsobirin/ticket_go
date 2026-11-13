@@ -13,7 +13,7 @@
     </div>
 
     <div class="bg-white p-6 sm:p-8 rounded-xl border border-surface-container shadow-sm">
-        <form method="POST" action="{{ route('operator.routes.update', $route) }}" class="space-y-5">
+        <form method="POST" action="{{ route('operator.routes.update', $route->id ?? $route) }}" class="space-y-5">
             @csrf
             @method('PUT')
             <div class="space-y-1.5">
@@ -26,7 +26,7 @@
                     required
                     class="w-full px-4 py-2.5 rounded-lg border border-surface-container bg-surface-container-low focus:bg-white focus:outline-none focus:ring-2 focus:ring-forest-700 text-sm transition"
                 >
-                    @foreach ($cities as $c)
+                    @foreach ($originCities ?? $cities as $c)
                         <option value="{{ $c->id }}" {{ old('origin_city_id', $route->origin_city_id) == $c->id ? 'selected' : '' }}>
                             {{ $c->name }}
                         </option>
@@ -47,7 +47,7 @@
                     required
                     class="w-full px-4 py-2.5 rounded-lg border border-surface-container bg-surface-container-low focus:bg-white focus:outline-none focus:ring-2 focus:ring-forest-700 text-sm transition"
                 >
-                    @foreach ($cities as $c)
+                    @foreach ($destinationCities ?? $cities as $c)
                         <option value="{{ $c->id }}" {{ old('destination_city_id', $route->destination_city_id) == $c->id ? 'selected' : '' }}>
                             {{ $c->name }}
                         </option>

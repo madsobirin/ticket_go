@@ -63,24 +63,24 @@
                 <thead class="bg-surface-container-low text-xs text-ink-600 uppercase border-b border-surface-container">
                     <tr>
                         <th class="px-6 py-3">Nama</th>
-                        <th class="px-6 py-3">Email</th>
+                        <th class="px-6 py-3">Telepon</th>
                         <th class="px-6 py-3">Username</th>
                         <th class="px-6 py-3">Peran</th>
-                        <th class="px-6 py-3">Tanggal Daftar</th>
+                        <th class="px-6 py-3">Alamat</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-surface-container">
                     @foreach ($recentUsers as $u)
                         <tr class="hover:bg-surface-container-low/40">
-                            <td class="px-6 py-4 font-medium text-ink-900">{{ $u->name }}</td>
-                            <td class="px-6 py-4 text-xs text-ink-600">{{ $u->email }}</td>
+                            <td class="px-6 py-4 font-medium text-ink-900">{{ $u->nama }}</td>
+                            <td class="px-6 py-4 text-xs text-ink-600">{{ $u->telepon ?? '-' }}</td>
                             <td class="px-6 py-4 font-mono text-xs">{{ $u->username }}</td>
                             <td class="px-6 py-4">
-                                <span class="px-2 py-0.5 rounded text-xs font-semibold {{ $u->role->value === 'admin' ? 'bg-amber-100 text-amber-800' : ($u->role->value === 'operator' ? 'bg-blue-100 text-blue-800' : 'bg-surface-container text-ink-900') }}">
-                                    {{ $u->role->label() }}
+                                <span class="px-2 py-0.5 rounded text-xs font-semibold bg-surface-container text-ink-900">
+                                    Member
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-xs text-ink-600">{{ $u->created_at->translatedFormat('d M Y, H:i') }}</td>
+                            <td class="px-6 py-4 text-xs text-ink-600">{{ $u->alamat ?? '-' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
