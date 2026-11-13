@@ -14,7 +14,8 @@ class VehicleRequest extends FormRequest
 
     public function rules(): array
     {
-        $vehicleId = $this->route('vehicle')?->id;
+        $vehicle = $this->route('vehicle');
+        $vehicleId = is_object($vehicle) ? ($vehicle->id_mobil ?? $vehicle->id) : $vehicle;
 
         return [
             'type' => ['required', 'string', 'max:50'],
@@ -22,10 +23,10 @@ class VehicleRequest extends FormRequest
                 'required',
                 'string',
                 'max:20',
-                Rule::unique('vehicles', 'plate_number')->ignore($vehicleId),
+                Rule::unique('kendaraan', 'nomor_polisi')->ignore($vehicleId, 'id_mobil'),
             ],
             'color' => ['nullable', 'string', 'max:30'],
-            'seat_capacity' => ['required', 'integer', 'min:1', 'max:50'],
+            'seat_capacity' => ['nullable', 'integer', 'min:1', 'max:50'],
         ];
     }
 

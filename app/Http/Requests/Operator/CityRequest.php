@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Operator;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class CityRequest extends FormRequest
 {
@@ -14,14 +13,11 @@ class CityRequest extends FormRequest
 
     public function rules(): array
     {
-        $cityId = $this->route('city')?->id;
-
         return [
             'name' => [
                 'required',
                 'string',
                 'max:60',
-                Rule::unique('cities', 'name')->ignore($cityId),
             ],
         ];
     }

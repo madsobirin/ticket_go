@@ -26,7 +26,7 @@
                     class="w-full px-4 py-2.5 rounded-lg border border-surface-container bg-surface-container-low focus:bg-white focus:outline-none focus:ring-2 focus:ring-forest-700 text-sm transition"
                 >
                     <option value="">-- Pilih Kota Asal --</option>
-                    @foreach ($cities as $c)
+                    @foreach ($originCities ?? $cities as $c)
                         <option value="{{ $c->id }}" {{ old('origin_city_id') == $c->id ? 'selected' : '' }}>
                             {{ $c->name }}
                         </option>
@@ -48,7 +48,7 @@
                     class="w-full px-4 py-2.5 rounded-lg border border-surface-container bg-surface-container-low focus:bg-white focus:outline-none focus:ring-2 focus:ring-forest-700 text-sm transition"
                 >
                     <option value="">-- Pilih Kota Tujuan --</option>
-                    @foreach ($cities as $c)
+                    @foreach ($destinationCities ?? $cities as $c)
                         <option value="{{ $c->id }}" {{ old('destination_city_id') == $c->id ? 'selected' : '' }}>
                             {{ $c->name }}
                         </option>

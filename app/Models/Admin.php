@@ -43,4 +43,19 @@ class Admin extends Authenticatable
     {
         return 'admin';
     }
+
+    public function isAdmin(): bool
+    {
+        return true;
+    }
+
+    public function isOperator(): bool
+    {
+        return true;
+    }
+
+    public function getAuthIdentifier()
+    {
+        return 'admin:'.$this->getKey();
+    }
 }

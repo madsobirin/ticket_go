@@ -42,4 +42,19 @@ class OperatorLoket extends Authenticatable
     {
         return 'operator';
     }
+
+    public function isAdmin(): bool
+    {
+        return false;
+    }
+
+    public function isOperator(): bool
+    {
+        return true;
+    }
+
+    public function getAuthIdentifier()
+    {
+        return 'operator:'.$this->getKey();
+    }
 }

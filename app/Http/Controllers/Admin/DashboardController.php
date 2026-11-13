@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\BookingStatus;
 use App\Http\Controllers\Controller;
-use App\Models\Booking;
-use App\Models\Route;
-use App\Models\Schedule;
-use App\Models\User;
-use App\Models\Vehicle;
+use App\Models\Jadwal;
+use App\Models\Kendaraan;
+use App\Models\KotaTujuan;
+use App\Models\Member;
+use App\Models\Pesan;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -19,14 +18,16 @@ class DashboardController extends Controller
      */
     public function index(Request $request): View
     {
-        $totalUsers = User::count();
-        $totalRoutes = Route::count();
-        $totalVehicles = Vehicle::count();
-        $totalSchedules = Schedule::count();
-        $totalBookings = Booking::count();
-        $paidBookingsRevenue = Booking::where('status', BookingStatus::Paid)->sum('price_snapshot');
+        $totalUsers = Member::count();
+        $totalRoutes = KotaTujuan::count();
+        $totalVehicles = Kendaraan::count();
+        $totalSchedules = Jadwal::count();
+        $totalBookings = Pesan::count();
+        $paidBookingsRevenue = Pesan::where('status', 'Lunas')
+            ->join('jadwal', 'pesan.id_jadwal', '=', 'jadwal.id_jadwal')
+            ->sum('jadwal.harga');
 
-        $recentUsers = User::latest()->take(5)->get();
+        $recentUsers = Member::take(5)->get();
 
         return view('admin.dashboard', [
             'totalUsers' => $totalUsers,

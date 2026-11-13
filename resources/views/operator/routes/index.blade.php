@@ -48,10 +48,10 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="inline-flex items-center gap-2">
-                                    <a href="{{ route('operator.routes.edit', $route) }}" class="p-1.5 text-forest-700 hover:text-forest-900 hover:bg-sage-100 rounded-lg transition" title="Ubah Rute">
+                                    <a href="{{ route('operator.routes.edit', $route->id) }}" class="p-1.5 text-forest-700 hover:text-forest-900 hover:bg-sage-100 rounded-lg transition" title="Ubah Rute">
                                         <span class="material-symbols-outlined text-base">edit</span>
                                     </a>
-                                    <form method="POST" action="{{ route('operator.routes.destroy', $route) }}" onsubmit="return confirm('Hapus rute ini? Tindakan ini tidak dapat dibatalkan.');">
+                                    <form method="POST" action="{{ route('operator.routes.destroy', $route->id) }}" onsubmit="return confirm('Hapus rute ini? Tindakan ini tidak dapat dibatalkan.');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-1.5 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition" title="Hapus Rute">

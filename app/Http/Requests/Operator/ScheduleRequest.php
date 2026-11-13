@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Operator;
 
-use App\Enums\ScheduleStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class ScheduleRequest extends FormRequest
 {
@@ -16,11 +14,11 @@ class ScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'route_id' => ['required', 'integer', 'exists:routes,id'],
-            'vehicle_id' => ['required', 'integer', 'exists:vehicles,id'],
+            'route_id' => ['required'],
+            'vehicle_id' => ['required', 'integer', 'exists:kendaraan,id_mobil'],
             'price' => ['required', 'integer', 'min:1000'],
-            'departure_at' => ['required', 'date'],
-            'status' => ['required', Rule::enum(ScheduleStatus::class)],
+            'departure_at' => ['required'],
+            'status' => ['required'],
         ];
     }
 
