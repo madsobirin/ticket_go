@@ -60,6 +60,19 @@ class PaymentController extends Controller
 
         $tglWaktu = Carbon::parse($validated['tanggal_transfer']);
 
+        // Simpan file bukti transfer jika ada
+        if ($request->hasFile('file_bukti')) {
+            $file = $request->file('file_bukti');
+            $cleanResi = preg_replace('/[^A-Za-z0-9_-]/', '', $validated['no_resi']);
+            $ext = $file->getClientOriginalExtension() ?: 'jpg';
+            $filename = $cleanResi.'.'.$ext;
+            $destination = public_path('uploads/bukti_transfer');
+            if (! file_exists($destination)) {
+                mkdir($destination, 0755, true);
+            }
+            $file->move($destination, $filename);
+        }
+
         KonfirmasiPesan::create([
             'no_resi' => $validated['no_resi'],
             'no_rek' => (int) preg_replace('/\D/', '', $validated['no_rek']),

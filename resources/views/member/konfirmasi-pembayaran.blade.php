@@ -155,7 +155,7 @@
                         </div>
                     </div>
 
-                    <form id="formKonfirmasi" method="POST" action="{{ route('member.konfirmasi-pembayaran.store') }}" class="space-y-6">
+                    <form id="formKonfirmasi" method="POST" action="{{ route('member.konfirmasi-pembayaran.store') }}" enctype="multipart/form-data" class="space-y-6">
                         @csrf
 
                         @if ($errors->any())
@@ -229,7 +229,7 @@
                                 <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="no_resi">
                                     Nomor Resi / Ref Transaksi Bank <span class="text-red-600">*</span>
                                 </label>
-                                <input id="no_resi" name="no_resi" type="text" value="{{ old('no_resi', 'TRX-202410-992102') }}" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900 font-mono" placeholder="Nomor referensi dari bukti transfer" required>
+                                <input id="no_resi" name="no_resi" type="text" value="{{ old('no_resi', 'TRX-' . date('ymd') . rand(1000, 9999)) }}" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900 font-mono" placeholder="Nomor referensi dari bukti transfer" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="tanggal_transfer">
@@ -382,40 +382,55 @@
 
     <!-- MODAL SUKSES KONFIRMASI -->
     <div id="modalSuksesKonfirmasi" class="fixed inset-0 bg-ink-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-paper-0 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in duration-200">
-            <div class="w-16 h-16 rounded-full bg-secondary-container text-forest-700 flex items-center justify-center mx-auto">
-                <span class="material-symbols-outlined text-[36px]">task_alt</span>
+        <div class="bg-paper-0 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in duration-200 border border-surface-container">
+            <div class="flex items-center justify-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-forest-900 text-white flex items-center justify-center shadow-md">
+                    <span class="material-symbols-outlined text-[28px]">confirmation_number</span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-2xl text-forest-900 leading-none">TicketGo</span>
+                        <span class="text-[10px] bg-forest-700 text-white font-bold px-2 py-0.5 rounded uppercase">Resmi</span>
+                    </div>
+                    <span class="text-xs text-forest-700 font-medium">Lintas Lampung Express</span>
+                </div>
             </div>
 
-            <div class="text-center space-y-2">
-                <span class="text-xs uppercase font-bold tracking-widest text-forest-700 block">Bukti Pembayaran Diterima</span>
-                <h3 class="font-headline-md text-2xl font-semibold text-forest-900">Konfirmasi Berhasil Dikirim!</h3>
-                <p class="text-sm text-ink-600 leading-relaxed">
-                    Data bukti transfer Anda dengan ID <strong class="text-forest-900 font-mono">#PSN-202410-098</strong> telah masuk ke antrean verifikasi staf loket Trans Lampung Express.
+            <div class="text-center space-y-2 pt-1">
+                <span class="text-xs uppercase font-bold tracking-widest text-green-700 block flex items-center justify-center gap-1.5">
+                    <span class="material-symbols-outlined text-[16px]">verified</span>
+                    Bukti Pembayaran Diterima Sistem
+                </span>
+                <h3 class="font-headline-md text-2xl font-bold text-forest-900">Konfirmasi Berhasil Terkirim!</h3>
+                <p class="text-sm text-ink-600 leading-relaxed max-w-lg mx-auto">
+                    Data bukti transfer Anda telah masuk ke antrean verifikasi staf loket resmi TicketGo Lintas Lampung.
                 </p>
             </div>
 
-            <div class="bg-cream-50 p-4 rounded-xl border border-surface-container space-y-2 text-xs">
-                <div class="flex justify-between text-ink-600">
-                    <span>Estimasi Verifikasi:</span>
-                    <span class="font-bold text-forest-900">5 - 15 Menit</span>
+            <div class="bg-cream-50 p-5 rounded-2xl border border-surface-container space-y-2.5 text-xs">
+                <div class="flex justify-between items-center text-ink-600">
+                    <span>Estimasi Verifikasi Loket:</span>
+                    <span class="font-bold text-forest-900 bg-sage-100 px-2 py-0.5 rounded">5 - 15 Menit</span>
                 </div>
-                <div class="flex justify-between text-ink-600">
-                    <span>Nomor Tiket Pesanan:</span>
-                    <span class="font-bold text-forest-900 font-mono">TL-KRU-0983</span>
+                <div class="flex justify-between items-center text-ink-600">
+                    <span>Layanan Loket:</span>
+                    <span class="font-bold text-forest-900">Pool Rajabasa / CS WhatsApp 0811-7200-889</span>
                 </div>
-                <div class="flex justify-between text-ink-600">
+                <div class="flex justify-between items-center text-ink-600">
                     <span>Status Tiket:</span>
-                    <span class="font-bold text-amber-500">Menunggu Validasi Loket</span>
+                    <span class="font-bold text-amber-600 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                        Menunggu Validasi Staf Loket
+                    </span>
                 </div>
             </div>
 
-            <div class="space-y-2.5 pt-2">
-                <button onclick="closeModalKonfirmasi()" class="w-full bg-forest-700 hover:bg-forest-900 text-white font-semibold text-sm py-3.5 px-4 rounded-xl transition-colors">
+            <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                <button onclick="closeModalKonfirmasi()" class="w-full sm:flex-1 bg-forest-700 hover:bg-forest-900 text-white font-semibold text-sm py-3.5 px-4 rounded-xl transition-colors cursor-pointer text-center">
                     Selesai &amp; Pantau Status Tiket
                 </button>
-                <a href="{{ route('member.beranda') }}" class="w-full block text-center text-xs text-ink-600 hover:text-forest-900 py-2 font-medium">
-                    Kembali ke Beranda Utama
+                <a href="{{ route('member.beranda') }}" class="w-full sm:w-auto text-center text-xs text-ink-600 hover:text-forest-900 py-3 px-4 font-medium rounded-xl hover:bg-surface-container transition-colors">
+                    Kembali ke Beranda
                 </a>
             </div>
         </div>

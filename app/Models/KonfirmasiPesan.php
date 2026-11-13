@@ -29,4 +29,17 @@ class KonfirmasiPesan extends Model
     {
         return $this->belongsTo(Pesan::class, 'id_pesan', 'id_pesan');
     }
+
+    public function getBuktiUrlAttribute(): ?string
+    {
+        $cleanResi = preg_replace('/[^A-Za-z0-9_-]/', '', $this->no_resi);
+        foreach (['jpg', 'jpeg', 'png', 'pdf', 'JPG', 'PNG'] as $ext) {
+            $filename = $cleanResi.'.'.$ext;
+            if (file_exists(public_path('uploads/bukti_transfer/'.$filename))) {
+                return asset('uploads/bukti_transfer/'.$filename);
+            }
+        }
+
+        return null;
+    }
 }

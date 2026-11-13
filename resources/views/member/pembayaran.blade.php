@@ -29,6 +29,40 @@
         ::-webkit-scrollbar {
             display: none;
         }
+
+        @media print {
+            body {
+                background: white !important;
+            }
+            header, main, #toastSuccess, .role-switcher-container, nav, button {
+                display: none !important;
+            }
+            #modalSlipBooking {
+                display: block !important;
+                position: static !important;
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            #modalSlipBooking > div {
+                max-width: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+            #modalSlipHeader, #modalSlipActionButtons {
+                display: none !important;
+            }
+            #printableSlipArea {
+                border: 2px solid #173B35 !important;
+                background: white !important;
+                width: 100% !important;
+                padding: 28px !important;
+            }
+        }
     </style>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -415,14 +449,19 @@
                                 </div>
                             </div>
 
-                            <!-- TOMBOL LANJUT KE KONFIRMASI -->
+                            <!-- TOMBOL LANJUT KE KONFIRMASI & UNDUH BUKTI -->
                             <div class="space-y-2.5">
+                                <button type="button" onclick="openModalSlipBooking()" class="w-full bg-white hover:bg-sage-100 text-forest-900 border border-forest-700/40 font-semibold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs transition-all text-center">
+                                    <span class="material-symbols-outlined text-[18px] text-forest-700">download</span>
+                                    <span>Unduh Bukti Tagihan / Booking Slip</span>
+                                </button>
+
                                 <a href="{{ route('member.konfirmasi-pembayaran') }}" class="w-full bg-forest-700 hover:bg-forest-900 text-white font-semibold text-sm py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all text-center">
-                                    <span>Saya Sudah Transfer, Konfirmasi</span>
-                                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                                    <span class="material-symbols-outlined text-[18px]">send</span>
+                                    <span>Kirim Bukti ke Meja Loket</span>
                                 </a>
 
-                                <a href="{{ route('member.pesanan') }}" class="w-full bg-transparent hover:bg-sage-100 text-forest-900 font-medium text-xs py-2.5 px-4 rounded-lg flex items-center justify-center gap-1.5 transition-colors text-center">
+                                <a href="{{ route('member.pesanan') }}" class="w-full bg-transparent hover:bg-sage-100 text-forest-900 font-medium text-xs py-2 px-4 rounded-lg flex items-center justify-center gap-1.5 transition-colors text-center">
                                     <span class="material-symbols-outlined text-[16px]">arrow_back</span>
                                     <span>Kembali ke Detail Pesanan</span>
                                 </a>
@@ -451,6 +490,161 @@
         </div>
     </main>
 
+    <!-- MODAL SLIP BUKTI BOOKING / TAGIHAN PEMBAYARAN -->
+    <div id="modalSlipBooking" class="fixed inset-0 bg-ink-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-paper-0 rounded-3xl max-w-4xl w-full p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in duration-150 border border-surface-container max-h-[92vh] overflow-y-auto">
+            <!-- MODAL HEADER -->
+            <div id="modalSlipHeader" class="flex items-center justify-between pb-4 border-b border-surface-container">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-forest-900 flex items-center justify-center text-paper-0 shadow-sm">
+                        <span class="material-symbols-outlined text-[24px]">confirmation_number</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-xl text-forest-900 tracking-tight leading-none">TicketGo</span>
+                            <span class="text-[10px] bg-amber-500 text-forest-900 font-bold px-2 py-0.5 rounded uppercase tracking-wider">Slip Bukti Pemesanan &amp; Tagihan</span>
+                        </div>
+                        <span class="text-xs text-forest-700 font-semibold tracking-wide uppercase mt-0.5">Lintas Lampung Express — Dokumen Resmi Reservasi</span>
+                    </div>
+                </div>
+                <button onclick="closeModalSlipBooking()" class="text-ink-600 hover:text-forest-900 p-2 rounded-lg hover:bg-surface-container transition-colors">
+                    <span class="material-symbols-outlined text-[22px]">close</span>
+                </button>
+            </div>
+
+            <!-- LEMBAR SLIP CETAK (FULL WIDTH) -->
+            <div id="printableSlipArea" class="bg-surface-container-low p-6 sm:p-8 rounded-2xl border-2 border-forest-900/30 space-y-6 text-xs font-mono">
+                <!-- KOP SLIP DENGAN LOGO TEXT TICKET GO -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-forest-900/20 pb-5">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-xl bg-forest-900 text-paper-0 flex items-center justify-center shadow-md">
+                            <span class="material-symbols-outlined text-[28px]">directions_bus</span>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-serif font-bold text-forest-900 text-2xl tracking-tight leading-none">TicketGo</span>
+                                <span class="text-[10px] bg-forest-900 text-paper-0 px-2 py-0.5 rounded font-bold uppercase tracking-wider">RESMI</span>
+                            </div>
+                            <span class="text-xs font-sans text-forest-700 font-semibold block mt-1">Lintas Lampung Express Travel System</span>
+                            <span class="text-[10px] font-sans text-ink-600">Pool Utama: Terminal Induk Rajabasa, Bandar Lampung • Telp: (0721) 703456</span>
+                        </div>
+                    </div>
+                    <div class="sm:text-right bg-white p-3 rounded-xl border border-surface-container shadow-xs">
+                        <span class="text-[10px] text-ink-600 block uppercase font-bold tracking-wider">KODE RESERVASI BOOKING</span>
+                        <strong class="text-forest-700 text-lg font-bold font-mono">#PSN-{{ str_pad($pesan->id_pesan ?? 1, 4, '0', STR_PAD_LEFT) }}</strong>
+                        <div class="mt-1 flex items-center sm:justify-end gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span class="text-[11px] font-bold text-amber-600 uppercase">Menunggu Pembayaran</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DUA KOLOM LEBAR PENUH: RINCIAN TRIP & TAGIHAN -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- KOLOM 1: DATA PERJALANAN & PENUMPANG -->
+                    <div class="bg-white p-5 rounded-xl border border-surface-container space-y-3.5 shadow-xs">
+                        <div class="flex items-center gap-2 pb-2 border-b border-surface-container text-forest-900 font-bold text-xs uppercase tracking-wider">
+                            <span class="material-symbols-outlined text-forest-700 text-[18px]">person_pin_circle</span>
+                            Rincian Perjalanan &amp; Penumpang
+                        </div>
+                        <div class="space-y-2.5 text-xs">
+                            <div class="flex justify-between items-center">
+                                <span class="text-ink-600">Nama Penumpang:</span>
+                                <strong class="text-forest-900 font-sans text-sm">{{ auth()->user()->nama ?? auth()->user()->name ?? 'Member' }}</strong>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-ink-600">Nomor Telepon:</span>
+                                <span class="text-forest-900 font-mono">{{ auth()->user()->telepon ?? auth()->user()->telp ?? '0812-3456-7890' }}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-ink-600">Rute Trayek:</span>
+                                <span class="bg-sage-100 text-forest-900 px-2 py-0.5 rounded font-bold">
+                                    {{ $pesan->jadwal->kotaAsal->nm_kota_asal ?? 'Bandar Lampung' }} &rarr; {{ $pesan->jadwal->kotaTujuan->nm_kota_tujuan ?? 'Krui' }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-ink-600">Jadwal Berangkat:</span>
+                                <span class="text-forest-900 font-semibold">{{ $pesan?->jadwal?->tgl_berangkat ? \Carbon\Carbon::parse($pesan->jadwal->tgl_berangkat)->format('d F Y') : date('d F Y') }} • {{ substr($pesan->jadwal->jam_berangkat ?? '08:00', 0, 5) }} WIB</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-ink-600">Kursi &amp; Armada:</span>
+                                <strong class="text-forest-700 bg-forest-700/10 px-2.5 py-1 rounded">
+                                    Kursi {{ $pesan->nomor_kursi ?? 1 }} ({{ $pesan->jadwal->kendaraan->jenis_mobil ?? 'HiAce' }} • {{ $pesan->jadwal->kendaraan->nomor_polisi ?? 'BE 1234 AA' }})
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KOLOM 2: RINCIAN TAGIHAN & TRANSFER LOKET -->
+                    <div class="bg-white p-5 rounded-xl border border-surface-container space-y-3.5 shadow-xs">
+                        <div class="flex items-center gap-2 pb-2 border-b border-surface-container text-forest-900 font-bold text-xs uppercase tracking-wider">
+                            <span class="material-symbols-outlined text-forest-700 text-[18px]">account_balance_wallet</span>
+                            Rincian Tagihan &amp; Rekening Loket
+                        </div>
+                        <div class="space-y-2.5 text-xs">
+                            <div class="flex justify-between items-center">
+                                <span class="text-ink-600">Bank Tujuan:</span>
+                                <strong class="text-forest-900">Bank Mandiri (Cab. Bandar Lampung)</strong>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-ink-600">Nomor Rekening:</span>
+                                <strong class="text-forest-700 text-sm font-mono tracking-wider">1140029182341</strong>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-ink-600">Atas Nama:</span>
+                                <span class="text-forest-900 font-semibold">PT TRANS LAMPUNG EXPRESS</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-ink-600">Alternatif Bank:</span>
+                                <span class="text-ink-600">BRI 009801002345531 / BCA 8270918821</span>
+                            </div>
+                            <div class="flex justify-between items-baseline pt-2 border-t-2 border-dashed border-surface-container">
+                                <span class="font-bold text-forest-900 uppercase">Total Tagihan Transfer:</span>
+                                <strong class="text-forest-700 text-xl font-bold font-mono">
+                                    Rp {{ number_format($pesan->jadwal->harga ?? 120000, 0, ',', '.') }}
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARCODE & CATATAN VALIDASI LOKET -->
+                <div class="border-t-2 border-surface-container pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-xl">
+                    <div class="space-y-1 text-center sm:text-left">
+                        <div class="flex items-center justify-center sm:justify-start gap-2">
+                            <span class="material-symbols-outlined text-forest-700 text-[18px]">verified</span>
+                            <span class="text-xs font-bold text-forest-900">Dokumen Sah TicketGo Lintas Lampung</span>
+                        </div>
+                        <span class="text-[10px] text-ink-600 block">
+                            Bawa slip ini atau unggah foto bukti transfer ke menu meja loket dalam 2 jam untuk diterbitkan e-tiket resmi.
+                        </span>
+                    </div>
+                    <div class="text-center sm:text-right space-y-1">
+                        <div class="h-7 w-48 bg-ink-900 mx-auto sm:ml-auto flex items-center justify-center text-white text-[9px] tracking-[0.25em] font-mono">
+                            ||| | |||| | ||| |||| |
+                        </div>
+                        <span class="text-[9px] text-ink-600 font-mono block">VERIF: TICKETGO-{{ strtoupper(substr(md5($pesan->id_pesan ?? 1), 0, 8)) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOMBOL AKSI SLIP (FULL WIDTH) -->
+            <div id="modalSlipActionButtons" class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                <button type="button" onclick="cetakSlipBooking()" class="w-full sm:flex-1 bg-forest-700 hover:bg-forest-900 text-white font-semibold text-xs py-3.5 px-5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[18px]">print</span>
+                    <span>Cetak / Simpan Slip (PDF)</span>
+                </button>
+                <a href="{{ route('member.konfirmasi-pembayaran') }}" class="w-full sm:flex-1 bg-surface-container hover:bg-sage-100 text-forest-900 font-semibold text-xs py-3.5 px-5 rounded-xl flex items-center justify-center gap-2 transition-all text-center">
+                    <span class="material-symbols-outlined text-[18px] text-forest-700">upload_file</span>
+                    <span>Lanjut Kirim Bukti ke Meja Loket</span>
+                </a>
+                <button type="button" onclick="closeModalSlipBooking()" class="w-full sm:w-auto bg-transparent hover:bg-surface-container text-ink-600 font-medium text-xs py-3 px-4 rounded-xl transition-colors">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICATION -->
     <div id="toastSuccess" class="fixed bottom-24 right-6 z-50 hidden bg-forest-900 text-paper-0 px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-amber-500/30 animate-in fade-in slide-in-from-bottom-3 duration-200">
         <span class="material-symbols-outlined text-amber-500 text-[20px]">check_circle</span>
@@ -461,6 +655,18 @@
     @include('partials.role-switcher')
 
     <script>
+        function openModalSlipBooking() {
+            document.getElementById('modalSlipBooking').classList.remove('hidden');
+        }
+
+        function closeModalSlipBooking() {
+            document.getElementById('modalSlipBooking').classList.add('hidden');
+        }
+
+        function cetakSlipBooking() {
+            window.print();
+        }
+
         // Live countdown timer (2 jam)
         let totalSeconds = 2 * 3600 - 341;
         const countdownEl = document.getElementById('countdownDisplay');

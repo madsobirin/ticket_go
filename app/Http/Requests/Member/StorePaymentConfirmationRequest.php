@@ -28,6 +28,7 @@ class StorePaymentConfirmationRequest extends FormRequest
             'no_rek' => ['required', 'string', 'max:30'],
             'tanggal_transfer' => ['required', 'date'],
             'jam_transfer' => ['nullable', 'string'],
+            'file_bukti' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
         ];
     }
 

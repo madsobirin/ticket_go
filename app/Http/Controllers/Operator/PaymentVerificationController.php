@@ -12,9 +12,9 @@ use Illuminate\View\View;
 class PaymentVerificationController extends Controller
 {
     /**
-     * Tampilkan daftar antrean konfirmasi pembayaran yang perlu diverifikasi.
+     * Tampilkan daftar antrean konfirmasi pembayaran yang perlu diverifikasi dan riwayat disetujui.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         $confirmations = KonfirmasiPesan::with([
             'pesan.member',
@@ -26,9 +26,23 @@ class PaymentVerificationController extends Controller
                 $q->where('status', 'Menunggu Konfirmasi');
             })
             ->latest('tgl_transfer')
-            ->paginate(15);
+            ->paginate(15, ['*'], 'pending_page');
 
-        return view('operator.konfirmasi-pembayaran', compact('confirmations'));
+        $approvedConfirmations = KonfirmasiPesan::with([
+            'pesan.member',
+            'pesan.jadwal.kotaAsal',
+            'pesan.jadwal.kotaTujuan',
+            'pesan.jadwal.kendaraan',
+        ])
+            ->whereHas('pesan', function ($q) {
+                $q->where('status', 'Lunas');
+            })
+            ->latest('tgl_transfer')
+            ->paginate(15, ['*'], 'approved_page');
+
+        $activeTab = $request->query('tab', 'pending');
+
+        return view('operator.konfirmasi-pembayaran', compact('confirmations', 'approvedConfirmations', 'activeTab'));
     }
 
     /**

@@ -7,6 +7,8 @@ use App\Models\KotaTujuan;
 use App\Models\Member;
 use App\Models\Pesan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
@@ -188,4 +190,72 @@ test('booking rejects duplicate seat selection on the same schedule', function (
     $response->assertSessionHas('error');
 
     expect(Pesan::where('id_jadwal', $jadwal->id_jadwal)->where('nomor_kursi', '3')->count())->toBe(1);
+});
+
+test('member can view payment page with download slip modal and submit confirmation to loket', function () {
+    Storage::fake('public');
+
+    $member = Member::create([
+        'nama' => 'Budi Santoso',
+        'alamat' => 'Bandar Lampung',
+        'telepon' => '081234567890',
+        'jen_kelamin' => 'L',
+        'username' => 'budis',
+        'password' => 'secret123',
+    ]);
+
+    $asal = KotaAsal::create(['nm_kota_asal' => 'Bandar Lampung']);
+    $tujuan = KotaTujuan::create(['nm_kota_tujuan' => 'Krui']);
+    $kendaraan = Kendaraan::create([
+        'jenis_mobil' => 'Toyota HiAce',
+        'nomor_polisi' => 'BE 1234 AA',
+        'warna_mobil' => 'Putih',
+    ]);
+
+    $jadwal = Jadwal::create([
+        'id_kota_asal' => $asal->id_kota_asal,
+        'id_kota_tujuan' => $tujuan->id_kota_tujuan,
+        'harga' => 120000,
+        'tgl_berangkat' => date('Y-m-d'),
+        'jam_berangkat' => '08:00:00',
+        'id_mobil' => $kendaraan->id_mobil,
+    ]);
+
+    $pesan = Pesan::create([
+        'id_jadwal' => $jadwal->id_jadwal,
+        'id_member' => $member->id_member,
+        'nomor_kursi' => '2',
+        'status' => 'Menunggu Pembayaran',
+    ]);
+
+    // 1. Cek halaman pembayaran member
+    $response = $this->actingAs($member)->get(route('member.pembayaran'));
+    $response->assertOk();
+    $response->assertSee('Unduh Bukti Tagihan / Booking Slip');
+    $response->assertSee('Kirim Bukti ke Meja Loket');
+    $response->assertSee('Slip Bukti Pemesanan');
+
+    // 2. Member mengisi form konfirmasi pembayaran ke loket
+    $file = UploadedFile::fake()->create('struk.jpg', 200, 'image/jpeg');
+
+    $postResponse = $this->actingAs($member)->post(route('member.konfirmasi-pembayaran.store'), [
+        'id_pesan' => $pesan->id_pesan,
+        'bank_tujuan' => 'MANDIRI',
+        'nominal_transfer' => '120.000',
+        'nama_pengirim' => 'Budi Santoso',
+        'no_rek' => '1140092817291',
+        'no_resi' => 'TRX-TEST-2026',
+        'tanggal_transfer' => '2026-11-13 10:30:00',
+        'file_bukti' => $file,
+    ]);
+
+    $postResponse->assertRedirect(route('member.pesanan'));
+
+    // Status pesanan berubah menjadi Menunggu Konfirmasi
+    expect($pesan->fresh()->status)->toBe('Menunggu Konfirmasi');
+
+    $this->assertDatabaseHas('konfirmasi_pesan', [
+        'no_resi' => 'TRX-TEST-2026',
+        'id_pesan' => $pesan->id_pesan,
+    ]);
 });
