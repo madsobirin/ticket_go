@@ -8,6 +8,7 @@ use App\Http\Controllers\Member\DashboardController as MemberDashboardController
 use App\Http\Controllers\Member\PaymentController as MemberPaymentController;
 use App\Http\Controllers\Operator\CityController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
+use App\Http\Controllers\Operator\PaymentVerificationController as OperatorPaymentVerificationController;
 use App\Http\Controllers\Operator\RouteController;
 use App\Http\Controllers\Operator\ScheduleController;
 use App\Http\Controllers\Operator\VehicleController;
@@ -55,7 +56,9 @@ Route::middleware('auth')->group(function () {
 
         // Operator UI Pages
         Route::get('/pesanan', fn () => view('operator.pesanan'))->name('pesanan');
-        Route::get('/konfirmasi-pembayaran', fn () => view('operator.konfirmasi-pembayaran'))->name('konfirmasi-pembayaran');
+        Route::get('/konfirmasi-pembayaran', [OperatorPaymentVerificationController::class, 'index'])->name('konfirmasi-pembayaran');
+        Route::post('/konfirmasi-pembayaran/{noResi}/setujui', [OperatorPaymentVerificationController::class, 'approve'])->name('konfirmasi-pembayaran.approve');
+        Route::post('/konfirmasi-pembayaran/{noResi}/tolak', [OperatorPaymentVerificationController::class, 'reject'])->name('konfirmasi-pembayaran.reject');
         Route::get('/layani-pemesanan', fn () => view('operator.layani-pemesanan'))->name('layani-pemesanan');
     });
 

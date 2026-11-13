@@ -203,7 +203,7 @@
                                 <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="nominal_transfer">
                                     Jumlah Nominal Ditransfer (Rp) <span class="text-red-600">*</span>
                                 </label>
-                                <input id="nominal_transfer" name="nominal_transfer" type="text" value="120.354" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900 font-mono font-bold" placeholder="cth. 120.354" required>
+                                <input id="nominal_transfer" name="nominal_transfer" type="text" value="{{ old('nominal_transfer', '120.354') }}" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900 font-mono font-bold" placeholder="cth. 120.354" required>
                             </div>
                         </div>
 
@@ -213,13 +213,13 @@
                                 <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="nama_pengirim">
                                     Nama Pemilik Rekening Pengirim <span class="text-red-600">*</span>
                                 </label>
-                                <input id="nama_pengirim" name="nama_pengirim" type="text" value="{{ auth()->user()->name ?? '' }}" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900" placeholder="Nama sesuai rekening bank Anda" required>
+                                <input id="nama_pengirim" name="nama_pengirim" type="text" value="{{ old('nama_pengirim', auth()->user()->nama ?? auth()->user()->name ?? '') }}" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900" placeholder="Nama sesuai rekening bank Anda" required>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="no_rek_pengirim">
+                                <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="no_rek">
                                     Nomor Rekening Pengirim <span class="text-red-600">*</span>
                                 </label>
-                                <input id="no_rek_pengirim" name="no_rek_pengirim" type="text" value="1140092817291" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900 font-mono" placeholder="cth. 1140092817291" required>
+                                <input id="no_rek" name="no_rek" type="text" value="{{ old('no_rek', old('no_rek_pengirim', '1140092817291')) }}" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900 font-mono" placeholder="cth. 1140092817291" required>
                             </div>
                         </div>
 
@@ -229,13 +229,13 @@
                                 <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="no_resi">
                                     Nomor Resi / Ref Transaksi Bank <span class="text-red-600">*</span>
                                 </label>
-                                <input id="no_resi" name="no_resi" type="text" value="TRX-202410-992102" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900 font-mono" placeholder="Nomor referensi dari bukti transfer" required>
+                                <input id="no_resi" name="no_resi" type="text" value="{{ old('no_resi', 'TRX-202410-992102') }}" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900 font-mono" placeholder="Nomor referensi dari bukti transfer" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-2" for="tanggal_transfer">
                                     Waktu / Jam Transfer <span class="text-red-600">*</span>
                                 </label>
-                                <input id="tanggal_transfer" name="tanggal_transfer" type="datetime-local" value="2026-11-08T14:35" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900" required>
+                                <input id="tanggal_transfer" name="tanggal_transfer" type="datetime-local" value="{{ old('tanggal_transfer', '2026-11-08T14:35') }}" class="w-full bg-surface-container-low focus:bg-paper-0 border border-surface-container focus:border-forest-700 focus:ring-1 focus:ring-forest-700 rounded-xl p-3 text-sm text-forest-900" required>
                             </div>
                         </div>
 

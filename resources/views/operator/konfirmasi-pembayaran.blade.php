@@ -144,23 +144,30 @@
                 <div class="flex items-center gap-2">
                     <span class="text-xs bg-paper-0 border border-surface-container px-3 py-2 rounded-xl text-forest-900 font-semibold flex items-center gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                        3 Pengajuan Menunggu Pengecekan
+                        {{ $confirmations->total() }} Pengajuan Menunggu Pengecekan
                     </span>
                 </div>
             </div>
+
+            @if (session('status'))
+                <div class="bg-green-700/10 border border-green-700/30 text-green-800 p-4 rounded-2xl flex items-center gap-3">
+                    <span class="material-symbols-outlined text-green-700">check_circle</span>
+                    <span class="text-xs font-semibold">{{ session('status') }}</span>
+                </div>
+            @endif
 
             <!-- TABS & PENCARIAN -->
             <div class="bg-paper-0 p-5 rounded-2xl border border-surface-container shadow-xs space-y-4">
                 <div class="flex items-center gap-2 overflow-x-auto border-b border-surface-container pb-2">
                     <button onclick="switchTab('PENDING')" id="tabBtnPending" class="font-semibold text-xs px-4 py-2 rounded-lg bg-forest-900 text-white transition-colors flex items-center gap-2">
                         <span>Menunggu Verifikasi</span>
-                        <span class="w-5 h-5 rounded-full bg-amber-500 text-forest-900 font-bold text-[10px] flex items-center justify-center">3</span>
+                        <span class="w-5 h-5 rounded-full bg-amber-500 text-forest-900 font-bold text-[10px] flex items-center justify-center">{{ $confirmations->total() }}</span>
                     </button>
                     <button onclick="switchTab('APPROVED')" id="tabBtnApproved" class="font-medium text-xs px-4 py-2 rounded-lg text-ink-600 hover:bg-surface-container transition-colors">
-                        Riwayat Disetujui (45)
+                        Riwayat Disetujui
                     </button>
                     <button onclick="switchTab('REJECTED')" id="tabBtnRejected" class="font-medium text-xs px-4 py-2 rounded-lg text-ink-600 hover:bg-surface-container transition-colors">
-                        Riwayat Ditolak (4)
+                        Riwayat Ditolak
                     </button>
                 </div>
 
@@ -177,206 +184,103 @@
                 </div>
             </div>
 
-            <!-- LIST PENGAJUAN VERIFIKASI (3 ITEMS PENDING) -->
+            <!-- LIST PENGAJUAN VERIFIKASI -->
             <div id="sectionPending" class="space-y-4">
-
-                <!-- KARTU 1: MATCH PERFECT (BAMBANG HERMANTO) -->
-                <div class="bg-paper-0 rounded-2xl p-6 shadow-sm border-2 border-forest-700/30 hover:border-forest-700/60 transition-all space-y-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-container">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-secondary-container text-forest-700 flex items-center justify-center">
-                                <span class="material-symbols-outlined text-[24px]">receipt_long</span>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="font-mono text-sm font-bold text-forest-900">#KNF-202410-044</span>
-                                    <span class="text-xs bg-amber-500/20 text-tertiary-container font-bold px-2 py-0.5 rounded-full">Baru 5 Menit Lalu</span>
+                @forelse ($confirmations as $conf)
+                    <div class="bg-paper-0 rounded-2xl p-6 shadow-sm border border-forest-700/30 hover:border-forest-700/60 transition-all space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-container">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-secondary-container text-forest-700 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[24px]">receipt_long</span>
                                 </div>
-                                <span class="text-xs text-ink-600">ID Pesanan Terkait: <strong class="text-forest-700 font-mono">#PSN-202410-098</strong></span>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs text-ink-600 block">Nominal Tagihan vs Transfer</span>
-                            <div class="flex items-baseline justify-end gap-2">
-                                <span class="font-mono text-lg font-bold text-forest-900">Rp 120.354</span>
-                                <span class="text-xs bg-green-700/15 text-green-700 font-bold px-2 py-0.5 rounded flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[13px]">check_circle</span> Cocok 100%
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DETAIL TRANSFER & BUKTI -->
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                        <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">Nama Pemilik Rekening</span>
-                                <strong class="text-forest-900 block text-xs">Bambang Hermanto</strong>
-                                <span class="text-[10px] text-ink-600 font-mono">1140092817291</span>
-                            </div>
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">Bank Tujuan</span>
-                                <strong class="text-forest-900 block text-xs">Bank Mandiri</strong>
-                                <span class="text-[10px] text-ink-600">Ke Rekening PT TL</span>
-                            </div>
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">No. Resi Transaksi</span>
-                                <strong class="text-forest-900 block font-mono text-xs">TRX-992102</strong>
-                                <span class="text-[10px] text-ink-600">08 Nov 14:35</span>
-                            </div>
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">Rute Perjalanan</span>
-                                <strong class="text-forest-900 block text-xs">Bandar Lampung → Krui</strong>
-                                <span class="text-[10px] text-forest-700 font-semibold">Kursi 3 (HiAce)</span>
-                            </div>
-                        </div>
-
-                        <!-- TOMBOL AKSI & PREVIEW STRUK -->
-                        <div class="md:col-span-4 flex flex-col sm:flex-row md:flex-col gap-2">
-                            <button onclick="reviewBukti('#KNF-202410-044', '#PSN-202410-098', 'Bambang Hermanto', 'Rp 120.354', 'Bank Mandiri', 'TRX-992102', 'Cocok')" class="w-full bg-forest-700 hover:bg-forest-900 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs transition-colors">
-                                <span class="material-symbols-outlined text-[18px]">zoom_in</span>
-                                Periksa Bukti Struk
-                            </button>
-                            <div class="flex gap-2">
-                                <button onclick="setujuiPembayaran('#PSN-202410-098')" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold text-xs py-2 rounded-xl transition-colors">
-                                    Setujui &amp; Terbitkan Tiket
-                                </button>
-                                <button onclick="tolakPembayaran('#PSN-202410-098')" class="w-full bg-red-600/15 hover:bg-red-600 hover:text-white text-red-600 font-bold text-xs py-2 rounded-xl transition-colors">
-                                    Tolak
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KARTU 2: MATCH (SITI RAHAYU) -->
-                <div class="bg-paper-0 rounded-2xl p-6 shadow-sm border border-surface-container hover:border-forest-700/40 transition-all space-y-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-container">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-secondary-container text-forest-700 flex items-center justify-center">
-                                <span class="material-symbols-outlined text-[24px]">receipt_long</span>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="font-mono text-sm font-bold text-forest-900">#KNF-202410-045</span>
-                                    <span class="text-xs bg-amber-500/20 text-tertiary-container font-bold px-2 py-0.5 rounded-full">18 Menit Lalu</span>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-mono text-sm font-bold text-forest-900">#RESI-{{ $conf->no_resi }}</span>
+                                        <span class="text-xs bg-amber-500/20 text-tertiary-container font-bold px-2 py-0.5 rounded-full">
+                                            {{ $conf->tgl_transfer ? \Carbon\Carbon::parse($conf->tgl_transfer)->format('d M Y') : 'Hari ini' }} {{ $conf->jam_transfer ? \Carbon\Carbon::parse($conf->jam_transfer)->format('H:i') : '' }}
+                                        </span>
+                                    </div>
+                                    <span class="text-xs text-ink-600">ID Pesanan Terkait: <strong class="text-forest-700 font-mono">#PSN-{{ $conf->id_pesan }}</strong></span>
                                 </div>
-                                <span class="text-xs text-ink-600">ID Pesanan Terkait: <strong class="text-forest-700 font-mono">#PSN-202410-099</strong></span>
                             </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs text-ink-600 block">Nominal Tagihan vs Transfer</span>
-                            <div class="flex items-baseline justify-end gap-2">
-                                <span class="font-mono text-lg font-bold text-forest-900">Rp 45.000</span>
-                                <span class="text-xs bg-green-700/15 text-green-700 font-bold px-2 py-0.5 rounded flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[13px]">check_circle</span> Cocok 100%
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                        <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">Nama Pemilik Rekening</span>
-                                <strong class="text-forest-900 block text-xs">Siti Rahayu</strong>
-                                <span class="text-[10px] text-ink-600 font-mono">009801992811</span>
-                            </div>
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">Bank Tujuan</span>
-                                <strong class="text-forest-900 block text-xs">Bank BRI</strong>
-                                <span class="text-[10px] text-ink-600">Ke Rekening PT TL</span>
-                            </div>
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">No. Resi Transaksi</span>
-                                <strong class="text-forest-900 block font-mono text-xs">BRI-8812903</strong>
-                                <span class="text-[10px] text-ink-600">08 Nov 13:55</span>
-                            </div>
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">Rute Perjalanan</span>
-                                <strong class="text-forest-900 block text-xs">Bandar Lampung → Metro</strong>
-                                <span class="text-[10px] text-forest-700 font-semibold">Kursi 1 (HiAce)</span>
-                            </div>
-                        </div>
-
-                        <div class="md:col-span-4 flex flex-col sm:flex-row md:flex-col gap-2">
-                            <button onclick="reviewBukti('#KNF-202410-045', '#PSN-202410-099', 'Siti Rahayu', 'Rp 45.000', 'Bank BRI', 'BRI-8812903', 'Cocok')" class="w-full bg-forest-700 hover:bg-forest-900 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs transition-colors">
-                                <span class="material-symbols-outlined text-[18px]">zoom_in</span>
-                                Periksa Bukti Struk
-                            </button>
-                            <div class="flex gap-2">
-                                <button onclick="setujuiPembayaran('#PSN-202410-099')" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold text-xs py-2 rounded-xl transition-colors">
-                                    Setujui &amp; Terbitkan Tiket
-                                </button>
-                                <button onclick="tolakPembayaran('#PSN-202410-099')" class="w-full bg-red-600/15 hover:bg-red-600 hover:text-white text-red-600 font-bold text-xs py-2 rounded-xl transition-colors">
-                                    Tolak
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KARTU 3: KURANG NOMINAL (HENDRA KUSUMA) -->
-                <div class="bg-paper-0 rounded-2xl p-6 shadow-sm border border-red-600/40 hover:border-red-600 transition-all space-y-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-container">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-red-600/15 text-red-600 flex items-center justify-center">
-                                <span class="material-symbols-outlined text-[24px]">warning</span>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="font-mono text-sm font-bold text-forest-900">#KNF-202410-046</span>
-                                    <span class="text-xs bg-red-600/15 text-red-600 font-bold px-2 py-0.5 rounded-full">Perlu Perhatian</span>
+                            <div class="text-right">
+                                <span class="text-xs text-ink-600 block">Nominal Tagihan Tiket</span>
+                                <div class="flex items-baseline justify-end gap-2">
+                                    <span class="font-mono text-lg font-bold text-forest-900">Rp {{ number_format($conf->pesan?->jadwal?->harga ?? 0, 0, ',', '.') }}</span>
+                                    <span class="text-xs bg-green-700/15 text-green-700 font-bold px-2 py-0.5 rounded flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[13px]">check_circle</span> Siap Verifikasi
+                                    </span>
                                 </div>
-                                <span class="text-xs text-ink-600">ID Pesanan Terkait: <strong class="text-forest-700 font-mono">#PSN-202410-101</strong></span>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs text-red-600 font-bold block">Tagihan Rp 120.000 • Transfer Rp 100.000</span>
-                            <span class="text-xs bg-red-600 text-white font-bold px-2 py-0.5 rounded">
-                                Kurang Rp 20.000
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                        <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">Nama Pengirim</span>
-                                <strong class="text-forest-900 block text-xs">Hendra Kusuma</strong>
-                                <span class="text-[10px] text-ink-600 font-mono">BCA 82711029</span>
-                            </div>
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">Bank Tujuan</span>
-                                <strong class="text-forest-900 block text-xs">Bank BCA</strong>
-                                <span class="text-[10px] text-ink-600">PT Trans Lampung</span>
-                            </div>
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">No. Resi Transaksi</span>
-                                <strong class="text-forest-900 block font-mono text-xs">BCA-99120</strong>
-                                <span class="text-[10px] text-ink-600">08 Nov 12:10</span>
-                            </div>
-                            <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
-                                <span class="text-[10px] text-ink-600 uppercase block">Rute Perjalanan</span>
-                                <strong class="text-forest-900 block text-xs">B. Lampung → Krui</strong>
-                                <span class="text-[10px] text-forest-700 font-semibold">Kursi 7</span>
                             </div>
                         </div>
 
-                        <div class="md:col-span-4 flex flex-col sm:flex-row md:flex-col gap-2">
-                            <button onclick="reviewBukti('#KNF-202410-046', '#PSN-202410-101', 'Hendra Kusuma', 'Rp 100.000 (Kurang Rp 20.000)', 'Bank BCA', 'BCA-99120', 'Kurang')" class="w-full bg-forest-700 hover:bg-forest-900 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs transition-colors">
-                                <span class="material-symbols-outlined text-[18px]">zoom_in</span>
-                                Periksa Bukti Struk
-                            </button>
-                            <div class="flex gap-2">
-                                <button onclick="tolakPembayaran('#PSN-202410-101')" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs py-2 rounded-xl transition-colors">
-                                    Tolak (Minta Pelunasan)
+                        <!-- DETAIL TRANSFER & BUKTI -->
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                            <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                                <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
+                                    <span class="text-[10px] text-ink-600 uppercase block">Nama Penumpang</span>
+                                    <strong class="text-forest-900 block text-xs">{{ $conf->pesan?->member?->nama ?? 'Member' }}</strong>
+                                    <span class="text-[10px] text-ink-600 font-mono">{{ $conf->pesan?->member?->telp ?? '-' }}</span>
+                                </div>
+                                <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
+                                    <span class="text-[10px] text-ink-600 uppercase block">No. Rek Pengirim</span>
+                                    <strong class="text-forest-900 block font-mono text-xs">{{ $conf->no_rek }}</strong>
+                                    <span class="text-[10px] text-ink-600">Transfer Bank</span>
+                                </div>
+                                <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
+                                    <span class="text-[10px] text-ink-600 uppercase block">No. Resi Transaksi</span>
+                                    <strong class="text-forest-900 block font-mono text-xs">{{ $conf->no_resi }}</strong>
+                                    <span class="text-[10px] text-ink-600">{{ $conf->jam_transfer ?? '-' }} WIB</span>
+                                </div>
+                                <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
+                                    <span class="text-[10px] text-ink-600 uppercase block">Rute Perjalanan</span>
+                                    <strong class="text-forest-900 block text-xs">
+                                        {{ $conf->pesan?->jadwal?->kotaAsal?->nm_kota_asal ?? 'Asal' }} → {{ $conf->pesan?->jadwal?->kotaTujuan?->nm_kota_tujuan ?? 'Tujuan' }}
+                                    </strong>
+                                    <span class="text-[10px] text-forest-700 font-semibold">Kursi {{ $conf->pesan?->nomor_kursi }} ({{ $conf->pesan?->jadwal?->kendaraan?->nm_kendaraan ?? 'Armada' }})</span>
+                                </div>
+                            </div>
+
+                            <!-- TOMBOL AKSI & PREVIEW STRUK -->
+                            <div class="md:col-span-4 flex flex-col sm:flex-row md:flex-col gap-2">
+                                <button onclick="reviewBukti('{{ $conf->no_resi }}', '{{ $conf->id_pesan }}', '{{ addslashes($conf->pesan?->member?->nama ?? '-') }}', 'Rp {{ number_format($conf->pesan?->jadwal?->harga ?? 0, 0, ',', '.') }}', '{{ $conf->no_rek }}', '{{ $conf->no_resi }}', 'Cocok')" class="w-full bg-forest-700 hover:bg-forest-900 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">zoom_in</span>
+                                    Periksa Bukti Struk
                                 </button>
+                                <div class="flex gap-2">
+                                    <form action="{{ route('operator.konfirmasi-pembayaran.approve', $conf->no_resi) }}" method="POST" class="w-full">
+                                        @csrf
+                                        <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold text-xs py-2 rounded-xl transition-colors">
+                                            Setujui &amp; Terbitkan Tiket
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('operator.konfirmasi-pembayaran.reject', $conf->no_resi) }}" method="POST" class="w-full" onsubmit="return confirm('Apakah Anda yakin ingin menolak konfirmasi pembayaran ini?')">
+                                        @csrf
+                                        <button type="submit" class="w-full bg-red-600/15 hover:bg-red-600 hover:text-white text-red-600 font-bold text-xs py-2 rounded-xl transition-colors">
+                                            Tolak
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @empty
+                    <div class="bg-paper-0 rounded-2xl p-12 text-center border border-surface-container space-y-3">
+                        <div class="w-16 h-16 rounded-2xl bg-forest-700/10 text-forest-700 mx-auto flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[32px]">task_alt</span>
+                        </div>
+                        <h3 class="font-headline-sm text-base font-bold text-forest-900">Semua Konfirmasi Selesai Diproses</h3>
+                        <p class="text-xs text-ink-600 max-w-md mx-auto">
+                            Tidak ada pengajuan verifikasi pembayaran yang menunggu pengecekan saat ini. Pengajuan baru dari member akan otomatis muncul di sini.
+                        </p>
+                    </div>
+                @endforelse
 
+                @if ($confirmations->hasPages())
+                    <div class="mt-4">
+                        {{ $confirmations->links() }}
+                    </div>
+                @endif
             </div>
 
         </div>
@@ -453,13 +357,19 @@
                     </div>
 
                     <div class="pt-3 border-t border-surface-container space-y-2">
-                        <button onclick="setujuiPembayaran(activeModalIdPesan)" class="w-full bg-forest-700 hover:bg-forest-900 text-white font-semibold text-xs py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined text-[18px]">check</span>
-                            Setujui Pembayaran &amp; Terbitkan Tiket
-                        </button>
-                        <button onclick="tolakPembayaran(activeModalIdPesan)" class="w-full bg-surface-container hover:bg-red-600 hover:text-white text-red-600 font-medium text-xs py-2.5 rounded-xl transition-colors">
-                            Tolak Pembayaran Ini
-                        </button>
+                        <form id="modalApproveForm" method="POST" action="">
+                            @csrf
+                            <button type="submit" class="w-full bg-forest-700 hover:bg-forest-900 text-white font-semibold text-xs py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">check</span>
+                                Setujui Pembayaran &amp; Terbitkan Tiket
+                            </button>
+                        </form>
+                        <form id="modalRejectForm" method="POST" action="" onsubmit="return confirm('Apakah Anda yakin ingin menolak pembayaran ini?')">
+                            @csrf
+                            <button type="submit" class="w-full bg-surface-container hover:bg-red-600 hover:text-white text-red-600 font-medium text-xs py-2.5 rounded-xl transition-colors">
+                                Tolak Pembayaran Ini
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -470,8 +380,6 @@
     @include('partials.role-switcher')
 
     <script>
-        let activeModalIdPesan = '';
-
         function switchTab(tab) {
             document.querySelectorAll('#tabBtnPending, #tabBtnApproved, #tabBtnRejected').forEach(btn => {
                 btn.classList.remove('bg-forest-900', 'text-white');
@@ -486,29 +394,20 @@
             }
         }
 
-        function reviewBukti(knf, psn, nama, nominal, bank, ref, cocok) {
-            activeModalIdPesan = psn;
+        function reviewBukti(noResi, psn, nama, nominal, bank, ref, cocok) {
             document.getElementById('previewNoRef').textContent = ref;
             document.getElementById('previewNamaPengirim').textContent = nama;
             document.getElementById('previewNominal').textContent = nominal;
+
+            const baseUrl = "{{ url('/operator/konfirmasi-pembayaran') }}";
+            document.getElementById('modalApproveForm').action = baseUrl + '/' + encodeURIComponent(noResi) + '/setujui';
+            document.getElementById('modalRejectForm').action = baseUrl + '/' + encodeURIComponent(noResi) + '/tolak';
+
             document.getElementById('modalReviewBukti').classList.remove('hidden');
         }
 
         function closeModalReview() {
             document.getElementById('modalReviewBukti').classList.add('hidden');
-        }
-
-        function setujuiPembayaran(idPesan) {
-            alert('Pembayaran ' + idPesan + ' berhasil disetujui! Status pesanan kini LUNAS dan e-tiket telah diterbitkan untuk penumpang.');
-            closeModalReview();
-        }
-
-        function tolakPembayaran(idPesan) {
-            const alasan = prompt('Masukkan alasan penolakan pembayaran:', 'Nominal transfer tidak sesuai / bukti struk tidak terbaca');
-            if (alasan) {
-                alert('Pembayaran ' + idPesan + ' ditolak dengan alasan: "' + alasan + '". Penumpang akan menerima notifikasi untuk unggah ulang.');
-                closeModalReview();
-            }
         }
     </script>
 

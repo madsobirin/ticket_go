@@ -643,10 +643,10 @@
 
                                 <a
                                     class="w-full bg-transparent hover:bg-sage-100 text-forest-900 font-label-lg text-label-lg py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-1.5 transition-colors"
-                                    href="{{ route('member.pilih-kursi') }}"
+                                    href="{{ route('member.cari-jadwal') }}"
                                 >
                                     <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-                                    <span>Ubah Nomor Kursi</span>
+                                    <span>Ubah Jadwal &amp; Kursi</span>
                                 </a>
                             </form>
 

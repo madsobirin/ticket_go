@@ -11,6 +11,15 @@ class StorePaymentConfirmationRequest extends FormRequest
         return $this->user() !== null;
     }
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->filled('no_rek_pengirim') && ! $this->filled('no_rek')) {
+            $this->merge([
+                'no_rek' => $this->input('no_rek_pengirim'),
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [
