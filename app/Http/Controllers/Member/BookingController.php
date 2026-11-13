@@ -88,11 +88,11 @@ class BookingController extends Controller
     {
         $occupiedSeats = $schedule
             ->pesanan()
-            ->pluck("nomor_kursi")
-            ->map(fn($k) => (int) $k)
+            ->pluck('nomor_kursi')
+            ->map(fn ($k) => (int) $k)
             ->toArray();
 
-        return view("member.kursi", compact("schedule", "occupiedSeats"));
+        return view('member.kursi', compact('schedule', 'occupiedSeats'));
     }
 
     /**

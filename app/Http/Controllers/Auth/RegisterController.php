@@ -15,7 +15,7 @@ class RegisterController extends Controller
      */
     public function show(): View
     {
-        return view("welcome");
+        return view('welcome');
     }
 
     /**
@@ -26,19 +26,19 @@ class RegisterController extends Controller
         $validated = $request->validated();
 
         Member::create([
-            "nama" => $validated["name"],
-            "alamat" => $validated["address"],
-            "telepon" => $validated["phone"],
-            "jen_kelamin" => $validated["gender"],
-            "username" => $validated["username"],
-            "password" => $validated["password"],
+            'nama' => $validated['name'],
+            'alamat' => $validated['address'],
+            'telepon' => $validated['phone'],
+            'jen_kelamin' => $validated['gender'],
+            'username' => $validated['username'],
+            'password' => $validated['password'],
         ]);
 
         return redirect()
-            ->route("login")
+            ->route('login')
             ->with(
-                "status",
-                "Pendaftaran akun member berhasil! Silakan masuk.",
+                'status',
+                'Pendaftaran akun member berhasil! Silakan masuk.',
             );
     }
 }
