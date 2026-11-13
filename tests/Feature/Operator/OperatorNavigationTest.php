@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Admin;
 use App\Models\Jadwal;
 use App\Models\Kendaraan;
 use App\Models\KotaAsal;
@@ -147,4 +148,40 @@ it('operator can perform crud operations on master data', function () {
     $this->assertDatabaseHas('jadwal', [
         'harga' => 150000,
     ]);
+});
+
+it('admin can access dashboard, pelanggan, keluhan, and master data in unified sidebar layout', function () {
+    $admin = Admin::create([
+        'email' => 'admin_test@lintaslampung.com',
+        'nama_lengkap' => 'Admin Test',
+        'no_telp' => '081233445566',
+        'password' => Hash::make('password123'),
+    ]);
+
+    $this->actingAs($admin)
+        ->get(route('admin.dashboard'))
+        ->assertOk()
+        ->assertSee('Konsol Administrator');
+
+    $this->actingAs($admin)
+        ->get(route('admin.pelanggan'))
+        ->assertOk()
+        ->assertSee('Konsol Administrator');
+
+    $this->actingAs($admin)
+        ->get(route('admin.keluhan'))
+        ->assertOk()
+        ->assertSee('Konsol Administrator');
+
+    $this->actingAs($admin)
+        ->get(route('admin.jadwal'))
+        ->assertRedirect(route('operator.schedules.index'));
+
+    $this->actingAs($admin)
+        ->get(route('admin.kota'))
+        ->assertRedirect(route('operator.cities.index'));
+
+    $this->actingAs($admin)
+        ->get(route('admin.kendaraan'))
+        ->assertRedirect(route('operator.vehicles.index'));
 });

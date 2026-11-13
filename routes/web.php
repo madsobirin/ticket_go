@@ -70,9 +70,9 @@ Route::middleware('auth')->group(function () {
 
         // Admin UI Pages
         Route::get('/pelanggan', fn () => view('admin.pelanggan'))->name('pelanggan');
-        Route::get('/jadwal', fn () => view('admin.jadwal'))->name('jadwal');
-        Route::get('/kota', fn () => view('admin.kota'))->name('kota');
-        Route::get('/kendaraan', fn () => view('admin.kendaraan'))->name('kendaraan');
+        Route::get('/jadwal', fn () => redirect()->route('operator.schedules.index'))->name('jadwal');
+        Route::get('/kota', fn () => redirect()->route('operator.cities.index'))->name('kota');
+        Route::get('/kendaraan', fn () => redirect()->route('operator.vehicles.index'))->name('kendaraan');
         Route::get('/keluhan', fn () => view('admin.keluhan'))->name('keluhan');
     });
 });
